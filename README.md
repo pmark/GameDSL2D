@@ -52,7 +52,7 @@ Whether you are developing a simple 2D game or an immersive, interactive experie
 
 You can add GameDSL2D to your project using Swift Package Manager. In Xcode, click `File -> Swift Packages -> Add Package Dependency` and enter the URL of this repository.
 
-## Usage
+## Basic Usage
 
 GameDSL2D is meant to provide a clean and intuitive interface for structuring your game's code. It helps you create and manage entities, components, systems, and more using a builder-style syntax.
 
@@ -66,7 +66,84 @@ let level = Level {
 }
 ```
 
-For more detailed usage instructions, check out our [Wiki](link_to_wiki).
+## Advanced Usage
+
+```swift
+Game {
+    // Shared components, with systems added automatically in order
+    PhysicsComponent()
+    SoundComponent()
+    InputComponent()
+    VisualEffectsComponent()
+    PlayerTrackingComponent()
+
+    Level(named: "Level 1") {
+        // Level-specific components
+        TerrainGenerationComponent(noiseType: .perlin, scale: 0.5, octaves: 4, persistence: 0.5, lacunarity: 2.0)
+        LevelTimerComponent(maxTime: 300) // In seconds
+        EnvironmentEffectsComponent(weatherType: .rain, dayNightCycle: true)
+
+        // Custom system
+        LevelTimerSystem()
+
+        Scenario(named: "Scenario 1") {
+            // Scenario-specific components
+            EnemySpawnerComponent(spawnRate: 1.0) // Spawn per second
+
+            Entity(named: "Player") {
+                // Entity-specific components
+                PlayerControlComponent()
+                HealthComponent(amount: 100)
+                PositionComponent(x: 0, y: 0)
+                PhysicsComponent(physicsBody: playerBody)
+                SpriteComponent(named: "playerSprite")
+            }
+            .subscribe(to: ContactEvent.self) { event in
+                // Handle the event, for instance reduce health
+                // If player contacts with enemy from top, the enemy gets damaged, else player gets damaged
+                let otherComponent = event.otherEntity[PhysicsComponent.self]
+                if self.position.y > otherComponent.position.y {
+                    otherEntity.triggerEvent(DamageEvent(damage: 50))
+                } else {
+                    self.triggerEvent(DamageEvent(damage: 50))
+                }
+            }
+            .subscribe(to: DamageEvent.self) { event in
+                // Handle the damage event
+                self.takeDamage(amount: event.damage, soundID: "player-damage")
+            }
+
+            Entity(named: "Enemy") {
+                // Entity-specific components
+                EnemyAIComponent()
+                HealthComponent(amount: 50)
+                PositionComponent(x: 100, y: 100)
+                PhysicsComponent(physicsBody: enemyBody)
+                SpriteComponent(named: "enemySprite")
+            }
+            .subscribe(to: DamageEvent.self) { event in
+                // Handle the damage event
+                self.takeDamage(amount: event.damage, soundID: "enemy-damage")
+            }
+            .population(count: 10, layout: .grid)
+
+             Entity(named: "Tree") {
+                SpriteComponent(named: "treeSprite")
+                SwayingShaderComponent()
+            }
+            .population(size: .large, layout: .poisson) { tree in
+                // Random modification to `tree` scale so that the large population of trees has a variety of sizes.
+                tree.scale *= Double.random(in: 0.8...1.2)
+                // Random color variation
+                tree.color = SKColor(red: .random(in: 0.8...1.0),
+                                     green: .random(in: 0.8...1.0),
+                                     blue: .random(in: 0.8...1.0),
+                                     alpha: 1.0)
+            }
+        }
+    }
+}
+```
 
 ## Contribution
 
