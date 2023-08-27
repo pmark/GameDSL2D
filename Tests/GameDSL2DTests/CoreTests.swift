@@ -59,21 +59,13 @@ final class CoreTests: XCTestCase {
     
     // Test for game initialization with entities
     func testLevelWithEntitiesInitialization() {
-        let game = Game {
-            Level("Test Level") {
-                Scenario("Test Scenario") {
-                    Entity("Test Entity 1")
-                    Entity("Entity with component") {
-                        Component()
-                        UpdatableComponent()
-                    }
-                }
-            }
-        }
-        
+        let game = buildGame1()
         let level = game.elements.first as? Level
         let scenario = level?.scenarios.first
         XCTAssertEqual(scenario?.entities.count, 2, "Scenario should contain two entities after initialization")
+        
+        let count = scenario?.entities.count
+        XCTAssertNotNil(count == 2, "There should be 2 entities")
         
         let e2 = scenario?.entities.last
         XCTAssertNotNil(e2, "The last element should be an entity")
@@ -85,4 +77,34 @@ final class CoreTests: XCTestCase {
         XCTAssertNotNil(uc, "The entity should have an updatable component")
     }
     
+    func buildGame1() -> Game {
+       Game {
+            Level("Test Level") {
+                Scenario("Test Scenario") {
+                    Entity("Test Entity 1")
+                    Entity("Entity with component") {
+                        Component()
+                        UpdatableComponent()
+                    }
+                }
+            }
+        }
+    }
+  
+    // Test that systems were initialized
+    func testGameInit() {
+        let game = buildGame1()
+        guard let level = game.elements.first as? Level else {
+            XCTAssert(false, "Game has no levels")
+            return
+        }
+                
+        guard let scenario = level.scenarios.first else {
+            XCTAssert(false, "Level has no scenarios")
+            return
+        }
+        
+        XCTAssertEqual(scenario.systems.count, 2, "Level should contain two systems after initialization")
+    }
+       
 }
