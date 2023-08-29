@@ -98,27 +98,26 @@ final class DSLTests1: XCTestCase {
         }
     }
     
-func testTriggerEvaluation() {
-    let scenario = Scenario("Trigger Test Scenario") {
-        LazyData {
-            TestGameData(testDataProperty: 10)
+    func testTriggerEvaluation() {
+        let scenario = Scenario("Trigger Test Scenario") {
+            LazyData {
+                TestGameData(testDataProperty: 10)
+            }
+            
+            Trigger(
+                event: .gameOver,
+                action: { (data: TestGameData) in
+                    print("action data \(data)")
+                },
+                condition: { (data: TestGameData) in data.testDataProperty == 10 })
         }
         
-        Trigger(
-            event: .gameOver,
-            action: { (data: TestGameData) in
-                print("action data \(data)")
-            },
-            condition: { (data: TestGameData) in data.testDataProperty == 10 })
+        if let data = scenario.data as? TestGameData {
+            XCTAssertTrue(data.triggers.first?.check(using: data) ?? false)
+        } else {
+            XCTFail("Trigger evaluation failed.")
+        }
     }
-    
-    if let data = scenario.data as? TestGameData {
-        XCTAssertTrue(data.triggers.first?.check(using: data) ?? false)
-    } else {
-        XCTFail("Trigger evaluation failed.")
-    }
-}
-
 }
 
 class TestGameData: GameData {
@@ -136,3 +135,4 @@ class AnotherGameData: GameData {
         self.someValue = someValue
     }
 }
+

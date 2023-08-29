@@ -7,6 +7,6 @@
 
 import Foundation
 
-public class UpdatableComponent: Component {
-    
-}
+//public class UpdatableComponent: Component {
+//    
+//}

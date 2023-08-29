@@ -33,8 +33,13 @@ class BaseConstruct {
                 childConstruct.parent = self
             }
         }
+        didInitialize()
     }
-
+    
+    func didInitialize() {
+        // Default implementation does nothing
+    }
+    
     convenience init(_ name: String, @GameConstructBuilder children: () -> [Any]) {
         self.init(name: name, children: children())
     }
@@ -104,15 +109,7 @@ final class Scenario: BaseConstruct {
 //    }
 }
 
-final class Entity: BaseConstruct {
-    lazy public var okEntity: OKEntity = {
-        return OKEntity()
-    }()
-    
-//    convenience init(_ name: String, @GameConstructBuilder children: () -> [Any]) {
-//        self.init(name: name, children: children())
-//    }
-}
+
 
 final class LazyData: BaseConstruct {
     // In the initializer, we don't want to directly take the GameData instance.
