@@ -1,6 +1,7 @@
+/*
 import GameplayKit
 
-public class Scenario: GameElement {
+public class ScenarioX: GameElement {
     public var name: String?
     public var entities: [Entity] = []
     public var components: [GKComponent] = []
@@ -34,3 +35,5 @@ public class Scenario: GameElement {
         systems.removeAll { $0 === system }
     }
 }
+
+*/

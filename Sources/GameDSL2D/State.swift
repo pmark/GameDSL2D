@@ -7,18 +7,38 @@
 
 import Foundation
 
-enum StateName: String {
+enum StateKey: String {
     case state1, state2 // ... more states
 }
 
-struct State {
-    let name: StateName
-    var onEnter: (() -> Void)?
-    var onExit: (() -> Void)?
-
-    init(_ name: StateName, onEnter: (() -> Void)? = nil, onExit: (() -> Void)? = nil) {
-        self.name = name
-        self.onEnter = onEnter
-        self.onExit = onExit
+class State: BaseConstruct {
+    let key: StateKey
+    var onEnterAction: ((State) -> Void)?
+    var onExitAction: ((State) -> Void)?
+    
+    init(_ key: StateKey) {
+        self.key = key
+        super.init(name: key.rawValue)
+    }
+    
+    func onEnter(_ action: @escaping (State) -> Void) -> Self {
+        self.onEnterAction = action
+        return self
+    }
+    
+    func onExit(_ action: @escaping (State) -> Void) -> Self {
+        self.onExitAction = action
+        return self
+    }
+    
+    // This method can be used internally to trigger the onEnter action
+    func triggerOnEnter() {
+        onEnterAction?(self)
+    }
+    
+    // This method can be used internally to trigger the onExit action
+    func triggerOnExit() {
+        onExitAction?(self)
     }
 }
+

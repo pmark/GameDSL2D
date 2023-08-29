@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "octopuskit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/InvadingOctopus/octopuskit",
+      "state" : {
+        "revision" : "334a8e0555e8566ab602723d6fd48035cbd488d9",
+        "version" : "3.2.0"
+      }
+    }
+  ],
+  "version" : 2
+}

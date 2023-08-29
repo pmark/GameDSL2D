@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum GameEventKey {
+enum GameEventKey: String {
     case levelStarted
     case levelCompleted
     case levelFailed

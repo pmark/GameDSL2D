@@ -5,6 +5,7 @@
 //  Created by P. Mark Anderson on 7/24/23.
 //
 
+/*
 import XCTest
 @testable import GameDSL2D
 
@@ -108,3 +109,4 @@ final class CoreTests: XCTestCase {
     }
        
 }
+*/

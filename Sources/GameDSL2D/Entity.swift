@@ -1,31 +1,22 @@
 import GameplayKit
+import OctopusKit
 
-public class Entity: GameElement {
-    public let name: String?
-    public let gkEntity: GKEntity
-    public var elements: [GameElement] = []
+extension Entity {
 
-    public init(_ name: String? = nil) {
-        self.name = name
-        gkEntity = GKEntity()
-    }
-    
     var components: [GKComponent] {
-        gkEntity.components
+        okEntity.components
     }
     
     public func addComponent(_ component: Component) {
-//        components.append(component)
-        gkEntity.addComponent(component)
+        okEntity.addComponent(component)
     }
     
     public func removeComponent(_ component: Component) {
-//        components.removeAll { $0 === component }
-        gkEntity.removeComponent(ofType: type(of: component))
+        okEntity.removeComponent(ofType: type(of: component))
     }
     
-    func component<ComponentType>(ofType componentClass: ComponentType.Type) -> ComponentType? where ComponentType : GKComponent {
+    func component<ComponentType>(ofType componentClass: ComponentType.Type) -> ComponentType? where ComponentType : OKComponent {
         print("E: getting \(ComponentType.self)")
-        return gkEntity.component(ofType: ComponentType.self)
+        return okEntity.component(ofType: ComponentType.self)
     }
 }

@@ -1,6 +1,7 @@
+/*
 import GameplayKit
 
-public class Game {
+public class GameX {
     public var levels: [Level] = []
     public var components: [GKComponent] = []
     public var systems: [System] = []
@@ -36,3 +37,4 @@ public class Game {
         systems.removeAll { $0 === system }
     }
 }
+*/
