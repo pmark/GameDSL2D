@@ -5,12 +5,16 @@
 //  Created by P. Mark Anderson on 8/29/23.
 //
 
+@testable import GameDSL2D
 import XCTest
 import OctopusKit
-@testable import GameDSL2D
 import GameplayKit
 
 final class EntityTests: XCTestCase {
+    func testEntityInitialization() {
+        let entity = Entity(name: "E") {}
+        XCTAssertEqual(entity.componentConstructs.count, 0, "Should have zero component constructs")
+    }
     
     func testLazyComponentInitialization() {
         var component1InitCalled = false
@@ -26,7 +30,7 @@ final class EntityTests: XCTestCase {
             return OKComponent() // Replace with actual OKComponent subclass
         }
         
-        _ = Entity("E") {
+        _ = Entity(name: "E") {
             Components {
                 [
                     component1Closure(),
@@ -48,5 +52,40 @@ final class EntityTests: XCTestCase {
         XCTAssertTrue(component2InitCalled, "component2Closure should now be called.")
     }
     
+    func testEntityData() {
+        let entity = Entity(
+            name: "Test Entity",
+            data: { TestGameData(testDataProperty: 3) }
+        )
+        
+        XCTAssertEqual(entity.name, "Test Entity")
+        
+        let gameData = entity.data as? TestGameData
+        XCTAssertNotNil(gameData)
+        if let data = gameData {
+            XCTAssertEqual(data.testDataProperty, 3)
+        } else {
+            XCTFail("Expected AnotherGameData type")
+        }
+    }
+    
+    func testEntityDataWithChild() {
+        let entity = Entity(
+            name: "Test Entity",
+            data: { TestGameData(testDataProperty: 3) }
+        ) {
+            State(.state2)
+        }
+        
+        XCTAssertEqual(entity.name, "Test Entity")
+        
+        let gameData = entity.data as? TestGameData
+        XCTAssertNotNil(gameData)
+        if let data = gameData {
+            XCTAssertEqual(data.testDataProperty, 3)
+        } else {
+            XCTFail("Expected AnotherGameData type")
+        }
+    }
 }
 

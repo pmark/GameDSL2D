@@ -49,7 +49,7 @@ class Trigger<T: GameData>: BaseConstruct, Activatable, AnyTrigger {
                 // Signal the event to any observing systems
                 // This can be achieved by various means, such as NotificationCenter, Combine Publishers, etc.
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: event.rawValue), object: nil)
-                print("Triggered event: \(event)")
+//                print("Triggered event: \(event)")
             }
             action?(data as! T)
         }

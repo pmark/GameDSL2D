@@ -43,12 +43,12 @@ class BaseConstruct {
         // Default implementation does nothing
     }
     
-    convenience init(_ name: String, data: (() -> GameData)? = nil, @GameConstructBuilder children: () -> [Any]) {
+    convenience init(name: String, data: (() -> GameData)? = nil, @GameConstructBuilder children: () -> [Any]) {
         self.init(name: name, data: data, children: children())
     }
     
-    convenience init(_ name: String) {
-        self.init(name: name, children: [])
+    convenience init(name: String) {
+        self.init(name: name, data: nil)
     }
     
     // Activate function remains unchanged

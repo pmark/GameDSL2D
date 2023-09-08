@@ -10,3 +10,5 @@ Pods/*.xcodeproj/xcuserdata/*
 *.xcodeproj/project.xcworkspace/xcshareddata/TeamChess.xccheckout
 soundbank.sf2
 .swiftpm
+.build
+junk

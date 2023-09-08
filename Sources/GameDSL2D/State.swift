@@ -18,7 +18,7 @@ class State: BaseConstruct {
     
     init(_ key: StateKey) {
         self.key = key
-        super.init(name: key.rawValue)
+        super.init(name: key.rawValue, data: nil)
     }
     
     func onEnter(_ action: @escaping (State) -> Void) -> Self {

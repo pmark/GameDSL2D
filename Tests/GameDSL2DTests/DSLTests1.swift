@@ -6,113 +6,25 @@
 //
 
 import XCTest
+import OctopusKit
 @testable import GameDSL2D
 
 final class DSLTests1: XCTestCase {
-    
-    func testScenarioInitialization() {
-        let scenario = Scenario("Test Scenario") {
-            Entity("Test Entity")
-        }
-        
-        XCTAssertEqual(scenario.name, "Test Scenario")
+    class func silencio() {
+        OctopusKit.logForDebug.disabled = true
+        OctopusKit.logForTips.disabled  = true
+        OctopusKit.logForErrors.disabled = true
+        OctopusKit.logForDeinits.disabled = true
+        OctopusKit.logForStates.disabled = true
+        OctopusKit.logForComponents.disabled = true
+        OctopusKit.logForFramework.disabled = true
+        OctopusKit.logForWarnings.disabled = true
+        OctopusKit.logForResources.disabled = true
     }
     
-    func testScenarioData() {
-        let scenario = Scenario(name: "Test Scenario", data: {
-            TestGameData(testDataProperty: 3)
-        })
-        
-        XCTAssertNotNil(scenario.data as? TestGameData)
-    }
-    
-    func testScenarioStates() {
-        var onEnterCalled = false
-        var onExitCalled = false
-        
-        let scenario = Scenario("Test Scenario") {
-            State(.state1)
-                .onEnter { state in
-                    onEnterCalled = true
-                    XCTAssertEqual(state.key, .state1)
-                    XCTAssertEqual(state.parent?.name, "Test Scenario")
-                    print("Entered state \(state.key) in scenario \(state.parent?.name ?? "?")")
-                }
-                .onExit { state in
-                    onExitCalled = true
-                    XCTAssertEqual(state.key, .state1)
-                    XCTAssertEqual(state.parent?.name, "Test Scenario")
-                    print("About to exit state \(state.key) in scenario \(state.parent?.name ?? "?")")
-                }
-        }
-        
-        // Check scenario name
-        XCTAssertEqual(scenario.name, "Test Scenario")
-
-        // Check children of the scenario to ensure the state is present
-        guard let state = scenario.children.first as? State else {
-            XCTFail("State not found as child of scenario")
-            return
-        }
-        
-        // Trigger onEnter and onExit to verify they work
-        state.triggerOnEnter()
-        XCTAssertTrue(onEnterCalled)
-        
-        state.triggerOnExit()
-        XCTAssertTrue(onExitCalled)
-    }
-
-    
-    func testEntityInitialization() {
-        let entity = Entity(
-            "Test Entity",
-            data: { TestGameData(testDataProperty: 3) }
-        ) {
-            State(.state2)
-        }
-        
-        XCTAssertEqual(entity.name, "Test Entity")
-        XCTAssertNotNil(entity.data as? TestGameData)
-    }
-    
-    func testStateInitialization() {
-        let state = State(.state1)
-        
-        XCTAssertEqual(state.key, .state1)
-    }
-    
-    func testLazyDataInitialization() {
-        let scenario = Scenario(
-            name: "Another Test Scenario",
-            data: { AnotherGameData(someValue: "TestValue") }
-        )
-        
-        if let data = scenario.data as? AnotherGameData {
-            XCTAssertEqual(data.someValue, "TestValue")
-        } else {
-            XCTFail("Expected AnotherGameData type")
-        }
-    }
-    
-    func testTriggerEvaluation() {
-        let scenario = Scenario(
-            "Trigger Test Scenario",
-            data: { TestGameData(testDataProperty: 10) }
-        ) {
-            Trigger(
-                event: .gameOver,
-                action: { (data: TestGameData) in
-                    print("action data \(data)")
-                },
-                condition: { (data: TestGameData) in data.testDataProperty == 10 })
-        }
-        
-        if let data = scenario.data as? TestGameData {
-            XCTAssertTrue(data.triggers.first?.check(using: data) ?? false)
-        } else {
-            XCTFail("Trigger evaluation failed.")
-        }
+    override class func setUp() {
+        super.setUp()
+        silencio()
     }
 }
 
@@ -131,4 +43,3 @@ class AnotherGameData: GameData {
         self.someValue = someValue
     }
 }
-

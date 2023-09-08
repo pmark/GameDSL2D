@@ -1,6 +1,5 @@
 import GameplayKit
 import OctopusKit
-
 import Foundation
 
 class Entity: BaseConstruct {
@@ -8,7 +7,7 @@ class Entity: BaseConstruct {
         return OKEntity()
     }()
     
-    var componentConstructs: [Components] = []
+    public var componentConstructs: [Components] = []
     
     private(set) lazy var components: [OKComponent] = {
         var allComponents: [OKComponent] = []
