@@ -22,10 +22,13 @@ class BaseConstruct {
         }
     }
     
-    init(name: String? = nil, data: GameData? = nil, children: [Any] = []) {
+    init(name: String? = nil, data: (() -> GameData)? = nil, children: [Any] = []) {
         self.name = name
-        self.data = data ?? children.lazy.compactMap { ($0 as? LazyData)?.data }.first
         self.children = children
+        
+        if let gameData = data {
+            self.data = gameData()
+        }
         
         // Set parent for each child
         self.children.forEach {
@@ -40,8 +43,8 @@ class BaseConstruct {
         // Default implementation does nothing
     }
     
-    convenience init(_ name: String, @GameConstructBuilder children: () -> [Any]) {
-        self.init(name: name, children: children())
+    convenience init(_ name: String, data: (() -> GameData)? = nil, @GameConstructBuilder children: () -> [Any]) {
+        self.init(name: name, data: data, children: children())
     }
     
     convenience init(_ name: String) {
@@ -107,14 +110,4 @@ final class Scenario: BaseConstruct {
 //    convenience init(_ name: String) {
 //        self.init(name: name, children: [])
 //    }
-}
-
-
-
-final class LazyData: BaseConstruct {
-    // In the initializer, we don't want to directly take the GameData instance.
-    // Instead, we want to take a closure that creates and returns the GameData.
-    init(_ dataProducer: @escaping () -> GameData) {
-        super.init(data: dataProducer())
-    }
 }

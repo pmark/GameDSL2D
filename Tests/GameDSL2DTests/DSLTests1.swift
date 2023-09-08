@@ -19,11 +19,9 @@ final class DSLTests1: XCTestCase {
     }
     
     func testScenarioData() {
-        let scenario = Scenario("Test Scenario") {
-            LazyData {
-                TestGameData(testDataProperty: 3)
-            }
-        }
+        let scenario = Scenario(name: "Test Scenario", data: {
+            TestGameData(testDataProperty: 3)
+        })
         
         XCTAssertNotNil(scenario.data as? TestGameData)
     }
@@ -67,11 +65,11 @@ final class DSLTests1: XCTestCase {
 
     
     func testEntityInitialization() {
-        let entity = Entity("Test Entity") {
+        let entity = Entity(
+            "Test Entity",
+            data: { TestGameData(testDataProperty: 3) }
+        ) {
             State(.state2)
-            LazyData {
-                TestGameData(testDataProperty: 3)
-            }
         }
         
         XCTAssertEqual(entity.name, "Test Entity")
@@ -85,11 +83,10 @@ final class DSLTests1: XCTestCase {
     }
     
     func testLazyDataInitialization() {
-        let scenario = Scenario("Another Test Scenario") {
-            LazyData {
-                AnotherGameData(someValue: "TestValue")
-            }
-        }
+        let scenario = Scenario(
+            name: "Another Test Scenario",
+            data: { AnotherGameData(someValue: "TestValue") }
+        )
         
         if let data = scenario.data as? AnotherGameData {
             XCTAssertEqual(data.someValue, "TestValue")
@@ -99,11 +96,10 @@ final class DSLTests1: XCTestCase {
     }
     
     func testTriggerEvaluation() {
-        let scenario = Scenario("Trigger Test Scenario") {
-            LazyData {
-                TestGameData(testDataProperty: 10)
-            }
-            
+        let scenario = Scenario(
+            "Trigger Test Scenario",
+            data: { TestGameData(testDataProperty: 10) }
+        ) {
             Trigger(
                 event: .gameOver,
                 action: { (data: TestGameData) in
