@@ -9,7 +9,7 @@ import XCTest
 @testable import GameDSL2D
 
 final class ScenarioTests: XCTestCase {
-        
+    
     func testScenarioInitialization() {
         let scenario = Scenario(name: "Test Scenario") {
             Entity(name: "Test Entity")
@@ -54,54 +54,54 @@ final class ScenarioTests: XCTestCase {
             State(.state1)
             State(.state2)
         }
-
+        
         // Check Scenario name
         XCTAssertEqual(scenario.name, "Test Scenario")
-
+        
         // Check the children count (Entity and States)
         XCTAssertEqual(scenario.children.count, 3)
     }
     
     func testScenarioStates() {
-           var onEnterCalled = false
-           var onExitCalled = false
+        var onEnterCalled = false
+        var onExitCalled = false
         let scenario = Scenario(name: "Test Scenario") {
-               State(.state1)
-                   .onEnter { state in
-                       onEnterCalled = true
-                       XCTAssertEqual(state.key, .state1)
-                       XCTAssertEqual(state.parent?.name, "Test Scenario")
-                   }
-                   .onExit { state in
-                       onExitCalled = true
-                       XCTAssertEqual(state.key, .state1)
-                       XCTAssertEqual(state.parent?.name, "Test Scenario")
-                   }
-           }
-           // Check scenario name
-           XCTAssertEqual(scenario.name, "Test Scenario")
-           // Check children of the scenario to ensure the state is present
-           guard let state = scenario.children.first as? State else {
-               XCTFail("State not found as child of scenario")
-               return
-           }
-           // Trigger onEnter and onExit to verify they work
-           state.triggerOnEnter()
-           XCTAssertTrue(onEnterCalled)
-           state.triggerOnExit()
-           XCTAssertTrue(onExitCalled)
-       }
-
-        
-//    func testScenarioActivation() {
-//        let scenario = Scenario(name: "Test Scenario") {
-//            Entity("Test Entity")
-//            State(.state1)
-//            State(.state2)
-//            Trigger(condition: { $0.testDataProperty == 0 }, event: .gameOver)
-//        }
-//
-//        scenario.activate() // This should bind the publisher (start watching changes)
-//
-//    }
+            State(.state1)
+                .onEnter { state in
+                    onEnterCalled = true
+                    XCTAssertEqual(state.key, .state1)
+                    XCTAssertEqual(state.parent?.name, "Test Scenario")
+                }
+                .onExit { state in
+                    onExitCalled = true
+                    XCTAssertEqual(state.key, .state1)
+                    XCTAssertEqual(state.parent?.name, "Test Scenario")
+                }
+        }
+        // Check scenario name
+        XCTAssertEqual(scenario.name, "Test Scenario")
+        // Check children of the scenario to ensure the state is present
+        guard let state = scenario.children.first as? State else {
+            XCTFail("State not found as child of scenario")
+            return
+        }
+        // Trigger onEnter and onExit to verify they work
+        state.triggerOnEnter()
+        XCTAssertTrue(onEnterCalled)
+        state.triggerOnExit()
+        XCTAssertTrue(onExitCalled)
+    }
+    
+    
+    //    func testScenarioActivation() {
+    //        let scenario = Scenario(name: "Test Scenario") {
+    //            Entity("Test Entity")
+    //            State(.state1)
+    //            State(.state2)
+    //            Trigger(condition: { $0.testDataProperty == 0 }, event: .gameOver)
+    //        }
+    //
+    //        scenario.activate() // This should bind the publisher (start watching changes)
+    //
+    //    }
 }
