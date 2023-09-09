@@ -9,10 +9,11 @@ import Combine
 import OctopusKit
 
 protocol Activatable {
+    var isActive: Bool { get set }
     func activate()
 }
 
-class BaseConstruct {
+public class BaseConstruct {
     var name: String?
     var data: GameData?
     var children: [Any] = []
@@ -63,6 +64,10 @@ class BaseConstruct {
     
     func didSetParent() {
     }
+    
+    func children<T: BaseConstruct>(ofType type: T.Type) -> [T] {
+        return children.compactMap { $0 as? T }
+    }
 }
 
 @resultBuilder
@@ -85,29 +90,4 @@ struct GameConstructBuilder {
     static func buildEither(second component: Any) -> [Any] {
         return [component]
     }
-}
-
-
-// MARK: - GameConstructs
-
-final class Game: BaseConstruct {
-//    convenience init(_ name: String, @GameConstructBuilder children: () -> [Any]) {
-//        self.init(name, children: children())
-//    }
-}
-
-final class Level: BaseConstruct {
-//    convenience init(_ name: String, @GameConstructBuilder children: () -> [Any]) {
-//        self.init(name, children: children())
-//    }
-}
-
-final class Scenario: BaseConstruct {
-//    convenience init(_ name: String, @GameConstructBuilder children: () -> [Any]) {
-//        self.init(name: name, children: children())
-//    }
-//
-//    convenience init(_ name: String) {
-//        self.init(name: name, children: [])
-//    }
 }

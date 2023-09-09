@@ -14,6 +14,7 @@ protocol AnyTrigger {
 }
 
 class Trigger<T: GameData>: BaseConstruct, Activatable, AnyTrigger {
+    var isActive: Bool = false
     let condition: (T) -> Bool
     let event: GameEventKey?
     let action: ((T) -> Void)?

@@ -2,7 +2,9 @@ import GameplayKit
 import OctopusKit
 import Foundation
 
-class Entity: BaseConstruct {
+class Entity: BaseConstruct, Activatable {
+    var isActive: Bool = false
+    
     lazy public var okEntity: OKEntity = {
         return OKEntity()
     }()
@@ -20,6 +22,12 @@ class Entity: BaseConstruct {
     override func didSetParent() {
         // Extracting the `Components` constructs from the children
         componentConstructs = children.compactMap { $0 as? Components }
+    }
+}
+
+extension BaseConstruct {
+    var entities: [Entity] {
+        return children(ofType: Entity.self)
     }
 }
 

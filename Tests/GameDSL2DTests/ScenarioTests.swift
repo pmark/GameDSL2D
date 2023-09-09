@@ -16,6 +16,7 @@ final class ScenarioTests: XCTestCase {
         }
         
         XCTAssertEqual(scenario.name, "Test Scenario")
+        XCTAssertEqual(scenario.entities.count, 1)
     }
     
     func testScenarioData() {
@@ -24,6 +25,7 @@ final class ScenarioTests: XCTestCase {
         })
         
         XCTAssertNotNil(scenario.data as? TestGameData)
+        XCTAssertEqual(scenario.entities.count, 0)
     }
     
     func testTriggerEvaluation() {
