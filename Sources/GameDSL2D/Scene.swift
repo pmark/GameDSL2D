@@ -31,7 +31,7 @@ class Scene: BaseConstruct {
         systems = children(ofType: Systems.self).last
         
         // Attach systems to okScene
-        systems.componentTypes.forEach { componentType in
+        systems?.componentTypes.forEach { componentType in
             okScene.componentTypes.append(componentType)
         }
     }
