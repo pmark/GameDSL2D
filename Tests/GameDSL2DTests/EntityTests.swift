@@ -10,10 +10,31 @@ import XCTest
 import OctopusKit
 import GameplayKit
 
+class TestComponent: OKComponent {
+    override init() {
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 final class EntityTests: XCTestCase {
     func testEntityInitialization() {
         let entity = Entity(name: "E") {}
         XCTAssertEqual(entity.componentConstructs.count, 0, "Should have zero component constructs")
+    }
+    
+    func testEntityComponents() {
+        let entity = Entity(name: "E") {
+            Components {[
+                OKComponent(),
+                TestComponent(),
+            ]}
+        }
+        XCTAssertEqual(entity.componentConstructs.count, 1, "Should have 1 component constructs")
+        XCTAssertEqual(entity.components.count, 2, "Should have 2 components")
     }
     
     func testLazyComponentInitialization() {

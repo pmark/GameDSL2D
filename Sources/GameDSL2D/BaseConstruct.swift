@@ -17,6 +17,7 @@ public class BaseConstruct {
     var name: String?
     var data: GameData?
     var children: [Any] = []
+    
     weak var parent: BaseConstruct? = nil {
         didSet {
             didSetParent()
@@ -67,6 +68,21 @@ public class BaseConstruct {
     
     func children<T: BaseConstruct>(ofType type: T.Type) -> [T] {
         return children.compactMap { $0 as? T }
+    }
+    
+    func getParentData<T: GameData>() -> T? {
+        return parent?.data as? T
+    }
+    
+    func getAncestorData<T: GameData>(ofType type: T.Type) -> T? {
+        var currentParent = parent
+        while let parent = currentParent {
+            if let data = parent.data as? T {
+                return data
+            }
+            currentParent = parent.parent
+        }
+        return nil
     }
 }
 

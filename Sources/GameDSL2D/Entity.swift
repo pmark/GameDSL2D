@@ -19,7 +19,7 @@ class Entity: BaseConstruct, Activatable {
         return allComponents
     }()
     
-    override func didSetParent() {
+    override func didInitialize() {
         // Extracting the `Components` constructs from the children
         componentConstructs = children.compactMap { $0 as? Components }
     }
