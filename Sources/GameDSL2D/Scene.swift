@@ -6,12 +6,16 @@
 //
 
 import Foundation
+import OctopusKit
 
 class Scene: BaseConstruct {
     var scenarios: [Scenario] = []
-    var systems: Systems?
     
-    public var systemConstructs: [Systems] = []
+    lazy var systems: [OKComponent.Type] = {
+        systemConstruct?.componentTypes ?? []
+    }()
+    
+    public var systemConstruct: Systems?
     
     var activeScenario: Scenario? {
         didSet {
@@ -28,12 +32,7 @@ class Scene: BaseConstruct {
     
     override func didInitialize() {
         scenarios = children(ofType: Scenario.self)
-        systems = children(ofType: Systems.self).last
-        
-        // Attach systems to okScene
-        systems?.componentTypes.forEach { componentType in
-            okScene.componentTypes.append(componentType)
-        }
+        systemConstruct = children(ofType: Systems.self).last
     }
     
     func activateScenario(named name: String) {
@@ -43,7 +42,16 @@ class Scene: BaseConstruct {
     }
 
     override func activate() {
-        super.activate()
+        // Load the first scenario or a default scenario
+        // TODO: determine which scenario should be active
+        scenarios.first?.activate()
+        
+        // Attach systems to okScene
+        systems.forEach { componentType in
+            okScene.componentTypes.append(componentType)
+        }
+        
+        // TODO: populate scene
         
         // Activation logic for the scene can go here
         // For example, presenting it

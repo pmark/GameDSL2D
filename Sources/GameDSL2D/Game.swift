@@ -1,10 +1,10 @@
 
 public class Game: BaseConstruct {
-    var scenes: [Scene] = []
-    var gameStates: [GameState] = []
-
-    override func didInitialize() {
-        scenes = children(ofType: Scene.self)
-        gameStates = children(ofType: GameState.self)
+    var scenes: [Scene] {
+        children(ofType: Scene.self)
+    }
+    
+    var gameStates: [GameState] {
+        children(ofType: GameState.self)
     }
 }
