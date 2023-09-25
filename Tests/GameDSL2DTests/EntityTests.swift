@@ -10,7 +10,17 @@ import XCTest
 import OctopusKit
 import GameplayKit
 
-class TestComponent: OKComponent {
+class TestComponent: ComponentType {
+    override init() {
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class TestComponent2: ComponentType {
     override init() {
         super.init()
     }
@@ -29,8 +39,8 @@ final class EntityTests: XCTestCase {
     func testEntityComponents() {
         let entity = Entity(name: "E") {
             Components {[
-                OKComponent(),
                 TestComponent(),
+                TestComponent2(),
             ]}
         }
         XCTAssertEqual(entity.componentConstructs.count, 1, "Should have 1 component constructs")
@@ -52,21 +62,20 @@ final class EntityTests: XCTestCase {
         }
         
         _ = Entity(name: "E") {
-            Components {
-                [
-                    component1Closure(),
-                    component2Closure(),
-                ]
-            }
+            Components {[
+                component1Closure(),
+                component2Closure(),
+            ]}
         }
         
         XCTAssertFalse(component1InitCalled, "component1Closure should not be called yet.")
         XCTAssertFalse(component2InitCalled, "component2Closure should not be called yet.")
         
         // Now, trigger the instantiation of the components:
-        let components = Components {
-            [ component1Closure(), component2Closure() ]
-        }
+        let components = Components {[
+            component1Closure(),
+            component2Closure(),
+        ]}
         _ = components.instantiateComponents()
         
         XCTAssertTrue(component1InitCalled, "component1Closure should now be called.")

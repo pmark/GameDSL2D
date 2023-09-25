@@ -11,14 +11,14 @@ enum StateKey: String {
     case state1, state2 // ... more states
 }
 
-class State: BaseConstruct {
+public class State: BaseConstruct {
     let key: StateKey
     var onEnterAction: ((State) -> Void)?
     var onExitAction: ((State) -> Void)?
     
     init(_ key: StateKey) {
         self.key = key
-        super.init(name: key.rawValue, data: nil)
+        super.init(name: key.rawValue)
     }
     
     func onEnter(_ action: @escaping (State) -> Void) -> Self {

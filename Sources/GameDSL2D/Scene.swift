@@ -1,14 +1,15 @@
 //
-//  File.swift
+//  Scene.swift
 //  
 //
 //  Created by P. Mark Anderson on 8/31/23.
 //
 
-import Foundation
 import OctopusKit
 
-class Scene: BaseConstruct {
+public class Scene: BaseConstruct {
+    var sceneIdentifier: GameIdentifier
+
     var scenarios: [Scenario] = []
     
     lazy var systems: [OKComponent.Type] = {
@@ -19,8 +20,8 @@ class Scene: BaseConstruct {
     
     var activeScenario: Scenario? {
         didSet {
-//            oldValue?.deactivate()
-//            activeScenario?.activate()
+            oldValue?.deactivate()
+            activeScenario?.activate()
         }
     }
     
@@ -30,7 +31,13 @@ class Scene: BaseConstruct {
         return scene
     }()
     
-    override func didInitialize() {
+    public init(sceneIdentifier: GameIdentifier, data: (() -> GameData)? = nil, @GameConstructBuilder childConstructs: () -> [Any]) {
+        self.sceneIdentifier = sceneIdentifier
+        super.init(name: "\(sceneIdentifier) scene", data: data, children: childConstructs())
+    }
+    
+    public override func didInitialize() {
+        SceneManager.shared.register(self, for: sceneIdentifier)
         scenarios = children(ofType: Scenario.self)
         systemConstruct = children(ofType: Systems.self).last
     }
@@ -41,7 +48,7 @@ class Scene: BaseConstruct {
         }
     }
 
-    override func activate() {
+    public override func activate() {
         // Load the first scenario or a default scenario
         // TODO: determine which scenario should be active
         scenarios.first?.activate()

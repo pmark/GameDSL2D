@@ -13,8 +13,7 @@ protocol AnyTrigger {
     func evaluate(using data: GameData)
 }
 
-class Trigger<T: GameData>: BaseConstruct, Activatable, AnyTrigger {
-    var isActive: Bool = false
+public class Trigger<T: GameData>: BaseConstruct, Activatable, AnyTrigger {
     let condition: (T) -> Bool
     let event: GameEventKey?
     let action: ((T) -> Void)?
@@ -24,7 +23,7 @@ class Trigger<T: GameData>: BaseConstruct, Activatable, AnyTrigger {
         self.condition = condition
         self.event = event
         self.action = action
-        super.init()  // call the initializer of BaseConstruct
+        super.init(name: "Trigger \(event?.rawValue ?? "")")  // call the initializer of BaseConstruct
     }
     
 //    init(condition: @escaping (T) -> Bool, event: GameEventKey?, action: ((T) -> Void)? = nil) {
@@ -36,7 +35,7 @@ class Trigger<T: GameData>: BaseConstruct, Activatable, AnyTrigger {
 //    }
     
     // Attach trigger to the GameData of its parent construct
-    override func didSetParent() {
+    public override func didSetParent() {
         parent?.data?.triggers.append(self)
     }
 

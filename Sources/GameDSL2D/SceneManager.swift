@@ -8,9 +8,23 @@
 import Foundation
 import OctopusKit
 
-class SceneManager {
+public class SceneManager {
+    static let shared = SceneManager()
+
     var currentScene: Scene?
     var activeEntities: [Entity] = []
+    private var scenes: [GameIdentifier: Scene] = [:]
+    
+    private init() {
+    }
+    
+    func register(_ scene: Scene, for identifier: GameIdentifier) {
+        scenes[identifier] = scene
+    }
+    
+    func getScene(for identifier: GameIdentifier) -> Scene? {
+        return scenes[identifier]
+    }
     
     func addEntity(_ entity: Entity) {
         activeEntities.append(entity)
@@ -50,7 +64,7 @@ class SceneManager {
 
 
 /*
-class SceneManager {
+public class SceneManager {
     var currentScene: OKSceneWrapper<OKScene>?
     var activeEntities: [Entity] = []
     var systems: [OKComponentSystem] = []

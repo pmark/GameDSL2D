@@ -9,17 +9,17 @@ import Foundation
 import OctopusKit
 import GameplayKit
 
-final class BaseScene: OKScene {
+public class BaseScene: OKScene {
     
     var sceneManager: SceneManager?
     var componentTypes: [OKComponent.Type] = []
     var scenarios: [Scenario] = []
     
-    override func createComponentSystems() -> [GKComponent.Type] {
+    public override func createComponentSystems() -> [GKComponent.Type] {
         return componentTypes
     }
     
-    override func prepareContents() {
+    public override func prepareContents() {
         // Your implementation here, which will use the elements declared within the DSL.
         // You'd typically iterate over the entities and components you have defined in your DSL
         // and add them to the scene.

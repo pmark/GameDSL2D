@@ -9,7 +9,7 @@ import Foundation
 import OctopusKit
 import GameplayKit
 
-class OKComponentWrapper: OKComponent {
+public class OKComponentWrapper: OKComponent {
     
     private let gkComponent: GKComponent
     
@@ -24,7 +24,7 @@ class OKComponentWrapper: OKComponent {
     }
     
     // Example of a method to demonstrate how wrapping could work:
-    override func update(deltaTime seconds: TimeInterval) {
+    public override func update(deltaTime seconds: TimeInterval) {
         // Redirect to GKComponent's update functionality, if necessary
         gkComponent.update(deltaTime: seconds)
     }

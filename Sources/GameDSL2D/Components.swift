@@ -2,7 +2,7 @@ import OctopusKit
 
 typealias ComponentType = OKComponent
 
-class Components: BaseConstruct {
+public class Components: BaseConstruct {
     
     let componentClosures: () -> [ComponentType]
 

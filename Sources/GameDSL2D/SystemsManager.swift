@@ -10,7 +10,7 @@ import GameplayKit
 
 typealias ComponentSystem = GKComponentSystem
 
-class SystemsManager {
+public class SystemsManager {
     private var registeredSystems: [ObjectIdentifier: ComponentSystem] = [:]
     
     func registerSystem<T: ComponentType>(for componentType: T.Type) {
@@ -25,7 +25,7 @@ class SystemsManager {
     // Methods to handle system updates, etc.
 }
 
-class ComponentRegistryManager {
+public class ComponentRegistryManager {
     // A dictionary to store component types and their count
     private var componentUsageCounts: [ObjectIdentifier: Int] = [:]
     
@@ -59,7 +59,7 @@ class ComponentRegistryManager {
 }
 
 
-class ComponentSynchronizationManager {
+public class ComponentSynchronizationManager {
     private let registryManager: ComponentRegistryManager
     
     init(registryManager: ComponentRegistryManager) {

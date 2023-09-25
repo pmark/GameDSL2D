@@ -7,8 +7,8 @@
 *.xcodeproj/xcuserdata/*
 *xcuserdata
 Pods/*.xcodeproj/xcuserdata/*
-*.xcodeproj/project.xcworkspace/xcshareddata/TeamChess.xccheckout
 soundbank.sf2
 .swiftpm
 .build
 junk
+Example/ExampleGameDSL2D/ExampleGameDSL2D.xcodeproj/project.xcworkspace

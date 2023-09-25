@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 // Base GameData with generic properties
-class GameData: ObservableObject {
+public class GameData: ObservableObject {
     var id: UUID = UUID()
     var metadata: [String: Any] = [:]
     var timestamp: Date = Date()

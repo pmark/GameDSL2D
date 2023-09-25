@@ -1,3 +1,4 @@
+import OctopusKit
 
 public class Game: BaseConstruct {
     var scenes: [Scene] {
@@ -5,6 +6,6 @@ public class Game: BaseConstruct {
     }
     
     var gameStates: [GameState] {
-        children(ofType: GameState.self)
+        self.children(ofType: GameState.self)
     }
 }

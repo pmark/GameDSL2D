@@ -6,31 +6,38 @@
 //
 
 import OctopusKit
+import SwiftUI
 
-class CustomOKGameState: OKGameState {
-    private let associatedSceneType: OKScene.Type
-
-    init(sceneType: OKScene.Type) {
-        self.associatedSceneType = sceneType
+public class GameState: OKGameState {
+    let identifier: GameIdentifier
+    let sceneIdentifier: GameIdentifier?
+//    let sceneFileName: String? // TODO: For scenes that should be loaded from .sks files
+    
+    public init(_ identifier: GameIdentifier, sceneIdentifier: GameIdentifier? = nil) {
+        self.identifier = identifier
+        self.sceneIdentifier = sceneIdentifier
         super.init()
+        self.associatedSceneClass = BaseScene.self
     }
 
-    // Provide some method or property to fetch the desired scene type without overriding the associatedSceneClass directly
-    func getSceneType() -> OKScene.Type {
-        return associatedSceneType
+    public convenience init<V: View>(_ identifier: GameIdentifier, sceneIdentifier: GameIdentifier? = nil, view: V) {
+        self.init(identifier, sceneIdentifier: sceneIdentifier)
+        self.associatedSceneClass = BaseScene.self
+        self.associatedSwiftUIView = AnyView(view)
     }
 }
 
-class GameState: BaseConstruct {
-    let associatedScene: Scene
-    let associatedSwiftUIView: Any?
-
-    init(scene: Scene, swiftUIView: Any? = nil) {
-        self.associatedScene = scene
-        self.associatedSwiftUIView = swiftUIView
-    }
-    
-    func instantiateOKGameState() -> OKGameState {
-        return CustomOKGameState(sceneType: type(of: associatedScene.okScene))
-    }
+public enum GameIdentifier: String, RawRepresentable {
+    case launch
+    case mainMenu
+    case lobby
+    case levelSelect
+    case settings
+    case playing
+    case paused
+    case failure
+    case success
+    case minorTransition
+    case majorTransition
+    case complete
 }

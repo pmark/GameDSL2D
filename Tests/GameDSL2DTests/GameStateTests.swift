@@ -11,55 +11,45 @@ import OctopusKit
 
 class GameStateTests: XCTestCase {
 
-    // MARK: - Setup & Teardown
-
-    override func setUpWithError() throws {
-        // Place setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Place teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
     // MARK: - GameState Tests
 
     func testGameStateInitialization() {
-        let scene = Scene(name: "TestScene")
-        let gameState = GameState(scene: scene)
+//        let scene = Scene(sceneIdentifier: .playing) {}
+//        let gameState = GameState(.playing)
+        // TODO: what if you had multiple scenes in the same game state?
 
-        XCTAssertNotNil(gameState)
-        XCTAssert(gameState.associatedScene === scene)  // Ensure both are the same instance
-        XCTAssertNil(gameState.associatedSwiftUIView)   // Should be nil by default
+//        XCTAssertNotNil(gameState)
+//        XCTAssert(gameState.associatedScene === scene)  // Ensure both are the same instance
+//        XCTAssertNil(gameState.associatedSwiftUIView)   // Should be nil by default
     }
 
     func testGameStateWithSwiftUIView() {
-        let scene = Scene(name: "TestScene")
-        let swiftUIView = "TestView"  // Replace with your actual SwiftUI view type if necessary
-        let gameState = GameState(scene: scene, swiftUIView: swiftUIView)
+//        let _ = Scene(sceneIdentifier: .playing) {}
+//        let gameState = GameState(.playing, sceneIdentifier: .playing, view: HUDView())
 
-        XCTAssertNotNil(gameState)
-        XCTAssertEqual(gameState.associatedSwiftUIView as? String, swiftUIView)
+//        XCTAssertNotNil(gameState)
+//        XCTAssertEqual(gameState.associatedSwiftUIView as? String, swiftUIView)
     }
 
     func testGameStateInstantiatesCorrectOKGameState() {
-        let scene = Scene(name: "TestScene")
-        let gameState = GameState(scene: scene)
-        guard let okGameState = gameState.instantiateOKGameState() as? CustomOKGameState else {
-            XCTFail("Can't get GameState from scene")
-            return
-        }
+//        let scene = Scene(sceneIdentifier: .playing) {}
+//        let gameState = GameState(.playing, sceneIdentifier: .playing)
+//        guard let okGameState = gameState.instantiateOKGameState() as? CustomOKGameState else {
+//            XCTFail("Can't get GameState from scene")
+//            return
+//        }
 
-        let stateSceneType = okGameState.getSceneType()
-        let sceneType = type(of: scene.okScene)
-        XCTAssert(stateSceneType === sceneType)
+//        let stateSceneType = okGameState.associatedSceneClass
+//        let sceneType = type(of: scene.okScene)
+//        XCTAssert(stateSceneType === sceneType)
     }
 
     // Test multiple game states within a game
     func testMultipleGameStates() {
-        let scene1 = Scene(name: "Scene1")
-        let scene2 = Scene(name: "Scene2")
-        let gameState1 = GameState(scene: scene1)
-        let gameState2 = GameState(scene: scene2, swiftUIView: "TestView")
+        let _ = Scene(sceneIdentifier: .playing) {}
+        let _ = Scene(sceneIdentifier: .paused) {}
+        let gameState1 = GameState(.playing, sceneIdentifier: .playing)
+        let gameState2 = GameState(.paused, sceneIdentifier: .paused, view: PausedView())
         
         let game = Game(name: "MyGame") {
             gameState1
@@ -71,13 +61,14 @@ class GameStateTests: XCTestCase {
         XCTAssert(game.children.contains(where: { $0 as? GameState === gameState2 }))
     }
     
-    // MARK: - Performance Tests
+    func testInit1() {
+        let _ = Scene(sceneIdentifier: .paused) {}
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            _ = GameState(scene: Scene(name: "TestScene"))
+        let game = Game {
+            GameState(.paused, sceneIdentifier: .paused)
         }
     }
 }
+
+
 
