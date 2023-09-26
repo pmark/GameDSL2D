@@ -7,26 +7,29 @@
 
 import Foundation
 
-enum StateKey: String {
-    case state1, state2 // ... more states
+enum DSLStateKey: String {
+    case initializing
+    case active
+    case inactive
+    case finished
 }
 
 public class State: BaseConstruct {
-    let key: StateKey
+    let key: DSLStateKey
     var onEnterAction: ((State) -> Void)?
     var onExitAction: ((State) -> Void)?
     
-    init(_ key: StateKey) {
+    init(_ key: DSLStateKey) {
         self.key = key
         super.init(name: key.rawValue)
     }
     
-    func onEnter(_ action: @escaping (State) -> Void) -> Self {
+    func didEnter(from previousState: DSLStateKey? = nil, action: @escaping (State) -> Void) -> Self {
         self.onEnterAction = action
         return self
     }
     
-    func onExit(_ action: @escaping (State) -> Void) -> Self {
+    func willExit(to nextState: DSLStateKey? = nil, action: @escaping (State) -> Void) -> Self {
         self.onExitAction = action
         return self
     }
