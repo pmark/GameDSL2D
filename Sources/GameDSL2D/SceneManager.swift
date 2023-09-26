@@ -18,6 +18,10 @@ public class SceneManager {
     private init() {
     }
     
+    public func reset() {
+        scenes = [:]
+    }
+    
     func register(_ scene: Scene, for identifier: GameIdentifier) {
         scenes[identifier] = scene
     }

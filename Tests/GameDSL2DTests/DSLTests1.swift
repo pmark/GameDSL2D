@@ -29,20 +29,19 @@ final class DSLTests1: XCTestCase {
     }
     
     func testBasicGame() {
-        let _ = Game(name: "Alien Invasion") {
-            
-            let _ = Scene(.playing) {
-                // Entities, etc go here
+        let game = Game(name: "Alien Invasion") {
+            Scene(.playing) {
+                Entity(name: "Player") {
+                    Components {[
+                        TestComponent()
+                    ]}
+                }
             }
             
-            GameState(.launch)
-            GameState(.mainMenu)
             GameState(.playing)
-            
-            Components {[
-                TestComponent()
-            ]}
         }
+    
+        XCTAssertNotNil(game)
     }
 }
 
@@ -97,12 +96,12 @@ let playScene = Scene(.playing) {
     Entity(name: "Obstacle") {
         TestComponent()
     }
-//    .population(count: 4, layout: .linear)
+    //    .population(count: 4, layout: .linear)
     
     Scenario(name: "Combat") {
         Entity(name: "Alien") {
             TestComponent()
         }
-//        .population(count: 55, layout: .grid)
+        //        .population(count: 55, layout: .grid)
     }
 }
