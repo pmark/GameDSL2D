@@ -34,7 +34,7 @@ final class GameTests: XCTestCase {
 //        XCTAssertEqual(game.scenes.count, 1)
 //    }
 
-    let scene1 = Scene(sceneIdentifier: .playing) {
+    let scene1 = Scene(.playing) {
         Scenario {
             Entity()
         }

@@ -7,8 +7,8 @@
 
 import OctopusKit
 
-public class Scene: BaseConstruct {
-    var sceneIdentifier: GameIdentifier
+public class Scene: BaseConstruct, Equatable {
+    var identifier: GameIdentifier
 
     var scenarios: [Scenario] = []
     
@@ -25,19 +25,23 @@ public class Scene: BaseConstruct {
         }
     }
     
+    public static func == (lhs: Scene, rhs: Scene) -> Bool {
+        lhs.identifier == rhs.identifier
+    }
+    
     lazy public var okScene: BaseScene = {
         // TODO: figure out scene size config
         let scene = BaseScene(size: .init(widthAndHeight: 1000)) //name: self.name ?? "UnnamedScene")
         return scene
     }()
     
-    public init(sceneIdentifier: GameIdentifier, data: (() -> GameData)? = nil, @GameConstructBuilder childConstructs: () -> [Any]) {
-        self.sceneIdentifier = sceneIdentifier
+    public init(_ sceneIdentifier: GameIdentifier, data: (() -> GameData)? = nil, @GameConstructBuilder childConstructs: () -> [Any]) {
+        self.identifier = sceneIdentifier
         super.init(name: "\(sceneIdentifier) scene", data: data, children: childConstructs())
     }
     
-    public override func didInitialize() {
-        SceneManager.shared.register(self, for: sceneIdentifier)
+    public override func didSetParent() {
+        SceneManager.shared.register(self, for: identifier)
         scenarios = children(ofType: Scenario.self)
         systemConstruct = children(ofType: Systems.self).last
     }

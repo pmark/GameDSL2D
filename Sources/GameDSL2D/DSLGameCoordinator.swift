@@ -17,7 +17,7 @@ class DSLGameCoordinator: OctopusGameCoordinator {
     func enter(_ identifier: GameIdentifier) {
         guard let gameState = gameStates[identifier] else { return }
         
-        if let sid = gameState.sceneIdentifier, let scene = SceneManager.shared.getScene(for: sid) {
+        if let scene = gameState.scene {
             scene.activate()
             // TODO: Additional logic to transition to the scene
         }

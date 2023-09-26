@@ -11,62 +11,65 @@ import OctopusKit
 
 class GameStateTests: XCTestCase {
 
+    let playScene = Scene(.playing) {}
+    
+    let pausedScene = Scene(.paused) {}
+    
     // MARK: - GameState Tests
 
     func testGameStateInitialization() {
-//        let scene = Scene(sceneIdentifier: .playing) {}
-//        let gameState = GameState(.playing)
+        let game = Game {
+            playScene
+            GameState(.playing)
+        }
+        
         // TODO: what if you had multiple scenes in the same game state?
 
-//        XCTAssertNotNil(gameState)
-//        XCTAssert(gameState.associatedScene === scene)  // Ensure both are the same instance
-//        XCTAssertNil(gameState.associatedSwiftUIView)   // Should be nil by default
+        if let gameState = game.gameStates.first {
+            XCTAssertNotNil(gameState.scene)
+            XCTAssertEqual(gameState.scene, playScene)  // Ensure both are the same instance
+            XCTAssertNotNil(SceneManager.shared.getScene(for: .playing))
+        } else {
+            XCTAssert(false, "Game has no game states")
+        }
     }
 
-    func testGameStateWithSwiftUIView() {
-//        let _ = Scene(sceneIdentifier: .playing) {}
-//        let gameState = GameState(.playing, sceneIdentifier: .playing, view: HUDView())
+    func testGameStateWithMissingScene() {
+        let game = Game {
+            GameState(.playing)
+        }
+        
+        // TODO: what if you had multiple scenes in the same game state?
 
-//        XCTAssertNotNil(gameState)
-//        XCTAssertEqual(gameState.associatedSwiftUIView as? String, swiftUIView)
+        if let gameState = game.gameStates.first {
+            XCTAssertNil(gameState.scene)
+        }
     }
-
-    func testGameStateInstantiatesCorrectOKGameState() {
-//        let scene = Scene(sceneIdentifier: .playing) {}
-//        let gameState = GameState(.playing, sceneIdentifier: .playing)
-//        guard let okGameState = gameState.instantiateOKGameState() as? CustomOKGameState else {
-//            XCTFail("Can't get GameState from scene")
-//            return
-//        }
-
-//        let stateSceneType = okGameState.associatedSceneClass
-//        let sceneType = type(of: scene.okScene)
-//        XCTAssert(stateSceneType === sceneType)
-    }
+    
+//    func testGameStateWithSwiftUIView() {
+//        let v = HUDView()
+//        let gameState = GameState(.playing, view: v)
+//        XCTAssertEqual(gameState.associatedSwiftUIView as? HUDView, v)
+//    }
 
     // Test multiple game states within a game
     func testMultipleGameStates() {
-        let _ = Scene(sceneIdentifier: .playing) {}
-        let _ = Scene(sceneIdentifier: .paused) {}
-        let gameState1 = GameState(.playing, sceneIdentifier: .playing)
-        let gameState2 = GameState(.paused, sceneIdentifier: .paused, view: PausedView())
+        let gameState1 = GameState(.playing, view: HUDView())
+        let gameState2 = GameState(.paused, view: PausedView())
         
-        let game = Game(name: "MyGame") {
+        let game = Game() {
+            playScene
+            pausedScene
+            
             gameState1
             gameState2
         }
 
-        XCTAssertEqual(game.children.count, 2)
+        XCTAssertEqual(game.children.count, 4)
         XCTAssert(game.children.contains(where: { $0 as? GameState === gameState1 }))
         XCTAssert(game.children.contains(where: { $0 as? GameState === gameState2 }))
-    }
-    
-    func testInit1() {
-        let _ = Scene(sceneIdentifier: .paused) {}
-
-        let game = Game {
-            GameState(.paused, sceneIdentifier: .paused)
-        }
+        XCTAssertEqual(game.gameStates.first?.scene, playScene)
+        XCTAssertEqual(game.gameStates.last?.scene, pausedScene)
     }
 }
 

@@ -13,6 +13,20 @@ public class GameState: OKGameState {
     let sceneIdentifier: GameIdentifier?
 //    let sceneFileName: String? // TODO: For scenes that should be loaded from .sks files
     
+    var scene: Scene? {
+        if let sid = self.sceneIdentifier, let scene = SceneManager.shared.getScene(for: sid) {
+            // Use overriding sceneIdentifier
+            return scene
+        }
+        
+        if let scene = SceneManager.shared.getScene(for: self.identifier) {
+            // Use GameState's identifier for convenience
+            return scene
+        }
+        
+        return nil
+    }
+    
     public init(_ identifier: GameIdentifier, sceneIdentifier: GameIdentifier? = nil) {
         self.identifier = identifier
         self.sceneIdentifier = sceneIdentifier

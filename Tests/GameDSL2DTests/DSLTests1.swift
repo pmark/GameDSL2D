@@ -31,7 +31,7 @@ final class DSLTests1: XCTestCase {
     func testBasicGame() {
         let _ = Game(name: "Alien Invasion") {
             
-            let _ = Scene(sceneIdentifier: .playing) {
+            let _ = Scene(.playing) {
                 // Entities, etc go here
             }
             
@@ -89,7 +89,7 @@ struct HUDView: View {
     }
 }
 
-let playScene = Scene(sceneIdentifier: .playing) {
+let playScene = Scene(.playing) {
     Entity(name: "Player") {
         TestComponent()
     }
