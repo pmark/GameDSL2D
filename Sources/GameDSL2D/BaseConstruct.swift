@@ -19,9 +19,9 @@ public class BaseConstruct {
     var children: [Any]
     var isActive: Bool = false
     
-    var gameCoordinator: DSLGameCoordinator? {
-        return OctopusKit.shared.gameCoordinator as? DSLGameCoordinator
-    }
+//    var gameCoordinator: DSLGameCoordinator? {
+//        return OctopusKit.shared.gameCoordinator as? DSLGameCoordinator
+//    }
     
     weak var parent: BaseConstruct? = nil {
         didSet {

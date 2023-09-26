@@ -9,6 +9,13 @@ import OctopusKit
 
 class DSLGameCoordinator: OctopusGameCoordinator {
     private var gameStates: [GameIdentifier: GameState] = [:]
+    
+    init(states: [GameState]) {
+        super.init(states: [OKGameState()], initialStateClass: OKGameState.self)
+        for state in states {
+            addState(state)
+        }
+    }
 
     func addState(_ gameState: GameState) {
         gameStates[gameState.identifier] = gameState

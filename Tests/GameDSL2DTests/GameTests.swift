@@ -16,6 +16,9 @@ final class GameTests: XCTestCase {
         }
         
         XCTAssertEqual(game.scenes.count, 1)
+        let scene = game.scenes.first(where: { $0.name == "playing scene" })
+        XCTAssertNotNil(scene)
+
     }
 
     func testInit2() throws {
