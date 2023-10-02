@@ -3,12 +3,26 @@ import OctopusKit
 import Foundation
 
 public class Entity: BaseConstruct, Activatable {
-    
-    lazy public var okEntity: OKEntity = {
-        return OKEntity()
-    }()
-    
+    public let type: AnyKey
     public var componentConstructs: [Components] = []
+    
+    public convenience init(type: EntityType, name: String = "", data: (() -> GameData)? = nil) {
+        self.init(type: AnyKey(type), name: name, data: data)
+    }
+    
+    public init(type: AnyKey, name: String = "", data: (() -> GameData)? = nil) {
+        self.type = type
+        super.init(name: name, data: data, children: [])
+    }
+    
+    public convenience init(type: EntityType, name: String = "", data: (() -> GameData)? = nil, @GameConstructBuilder childConstructs: () -> [Any]) {
+        self.init(type: AnyKey(type), name: name, data: data, childConstructs: childConstructs)
+    }
+    
+    public init(type: AnyKey, name: String = "", data: (() -> GameData)? = nil, @GameConstructBuilder childConstructs: () -> [Any]) {
+        self.type = type
+        super.init(name: name, data: data, children: childConstructs())
+    }
     
     private(set) lazy var components: [OKComponent] = {
         var allComponents: [OKComponent] = []
@@ -17,10 +31,45 @@ public class Entity: BaseConstruct, Activatable {
         }
         return allComponents
     }()
-    
+
+    public func createOKEntity() -> OKEntity {
+        // Logic to create and configure a new OKEntity instance
+        let newOKEntity = OKEntity()
+        for construct in componentConstructs {
+            // Add components to the new OKEntity
+            // This is simplified; you'll have to adapt it to fit OctopusKit's component system
+            construct.instantiateComponents().forEach { newOKEntity.addComponent($0) }
+        }
+        return newOKEntity
+    }
     public override func didInitialize() {
         // Extracting the `Components` constructs from the children
         componentConstructs = children.compactMap { $0 as? Components }
+        
+        // Automatically register the entity for future use
+        EntityFactory.shared.register(type: type, name: self.name, entity: self)
+    }
+
+    public func create() -> OKEntity {
+        let newOKEntity = OKEntity()
+        
+        // Initialize components from the constructs and add them to the new OKEntity.
+        let instantiatedComponents = componentConstructs.flatMap { $0.instantiateComponents() }
+        for component in instantiatedComponents {
+            newOKEntity.addComponent(component)
+        }
+        
+        // TODO: Any other OKEntity configuration logic goes here
+        
+        return newOKEntity
+    }
+    
+    public static func create(type: EntityType, name: String? = "") -> OKEntity? {
+        return create(type: AnyKey(type), name: name)
+    }
+    
+    public static func create(type: AnyKey, name: String? = "") -> OKEntity? {
+        return EntityFactory.shared.create(type: type, name: name)
     }
 }
 
@@ -30,49 +79,3 @@ extension BaseConstruct {
     }
 }
 
-/*
-public class Entity: BaseConstruct {
-    var componentConstructs: Components?
-    
-    lazy var components: [OKComponent] = {
-        print("Entity getting components...")
-        if let componentConstructs = self.componentConstructs {
-        print("\nGot 'em")
-            return componentConstructs.instantiateComponents()
-        }
-        print("\nNONE")
-        return []
-    }()
-
-    override func didInitialize() {
-        super.didInitialize()
-        
-        // Assign the componentConstructs if they are among the children
-        self.componentConstructs = self.children.compactMap { $0 as? Components }.first
-    }
-}
-*/
-
-
-
-/*
-extension Entity {
-
-    var components: [GKComponent] {
-        okEntity.components
-    }
-    
-    public func addComponent(_ component: Component) {
-        okEntity.addComponent(component)
-    }
-    
-    public func removeComponent(_ component: Component) {
-        okEntity.removeComponent(ofType: type(of: component))
-    }
-    
-    func component<ComponentType>(ofType componentClass: ComponentType.Type) -> ComponentType? where ComponentType : OKComponent {
-        print("E: getting \(ComponentType.self)")
-        return okEntity.component(ofType: ComponentType.self)
-    }
-}
-*/

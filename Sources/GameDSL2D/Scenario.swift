@@ -1,2 +1,1 @@
-public class Scenario: BaseConstruct, Activatable {
-}
+public class Scenario: BaseConstruct, Activatable { }

@@ -10,34 +10,16 @@ import XCTest
 import OctopusKit
 import GameplayKit
 
-class TestComponent: ComponentType {
-    override init() {
-        super.init()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
 
-class TestComponent2: ComponentType {
-    override init() {
-        super.init()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
 
 final class EntityTests: XCTestCase {
     func testEntityInitialization() {
-        let entity = Entity(name: "E") {}
+        let entity = Entity(type: .player, name: "E")
         XCTAssertEqual(entity.componentConstructs.count, 0, "Should have zero component constructs")
     }
     
     func testEntityComponents() {
-        let entity = Entity(name: "E") {
+        let entity = Entity(type: .player, name: "E") {
             Components {[
                 TestComponent(),
                 TestComponent2(),
@@ -61,7 +43,7 @@ final class EntityTests: XCTestCase {
             return OKComponent() // Replace with actual OKComponent subclass
         }
         
-        _ = Entity(name: "E") {
+        _ = Entity(type: .player, name: "E") {
             Components {[
                 component1Closure(),
                 component2Closure(),
@@ -84,9 +66,10 @@ final class EntityTests: XCTestCase {
     
     func testEntityData() {
         let entity = Entity(
+            type: .player,
             name: "Test Entity",
             data: { TestGameData(testDataProperty: 3) }
-        )
+        ) {}
         
         XCTAssertEqual(entity.name, "Test Entity")
         
@@ -101,10 +84,10 @@ final class EntityTests: XCTestCase {
     
     func testEntityDataWithChild() {
         let entity = Entity(
-            name: "Test Entity",
+            type: .player, name: "Test Entity",
             data: { TestGameData(testDataProperty: 3) }
         ) {
-            State(.active)
+            State(key: StateKey.active)
         }
         
         XCTAssertEqual(entity.name, "Test Entity")

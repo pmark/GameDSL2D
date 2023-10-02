@@ -11,7 +11,7 @@
      var body: some View {
          DSLGameView {
              Game() {
-                 Scene(.playing) {
+                 Scene(key: .playing) {
                      Entity(name: "Player") {
                          Components {[
                              TestComponent()

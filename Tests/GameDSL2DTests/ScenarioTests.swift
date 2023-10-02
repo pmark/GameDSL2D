@@ -12,7 +12,7 @@ final class ScenarioTests: XCTestCase {
     
     func testScenarioInitialization() {
         let scenario = Scenario(name: "Test Scenario") {
-            Entity(name: "Test Entity")
+            Entity(type: .player, name: "Test Entity")
         }
         
         XCTAssertEqual(scenario.name, "Test Scenario")
@@ -50,9 +50,9 @@ final class ScenarioTests: XCTestCase {
     
     func testBasicScenarioInitialization() {
         let scenario = Scenario(name: "Test Scenario") {
-            Entity(name: "Test Entity")
-            State(.initializing)
-            State(.active)
+            Entity(type: .player, name: "Test Entity")
+            State(key: .initializing)
+            State(key: .active)
         }
         
         // Check Scenario name
@@ -66,15 +66,15 @@ final class ScenarioTests: XCTestCase {
         var onEnterCalled = false
         var onExitCalled = false
         let scenario = Scenario(name: "Test Scenario") {
-            State(.initializing)
+            State(key: .initializing)
                 .didEnter { state in
                     onEnterCalled = true
-                    XCTAssertEqual(state.key, .initializing)
+                    XCTAssertEqual(state.key, AnyKey(.initializing))
                     XCTAssertEqual(state.parent?.name, "Test Scenario")
                 }
                 .willExit { state in
                     onExitCalled = true
-                    XCTAssertEqual(state.key, .initializing)
+                    XCTAssertEqual(state.key, AnyKey(.initializing))
                     XCTAssertEqual(state.parent?.name, "Test Scenario")
                 }
         }

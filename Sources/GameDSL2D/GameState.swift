@@ -8,40 +8,58 @@
 import OctopusKit
 import SwiftUI
 
-public class GameState: OKGameState {
-    let identifier: GameIdentifier
-    let sceneIdentifier: GameIdentifier?
+public class GameState: State {
+    let sceneKey: AnyKey?
+    var view: AnyView?
 //    let sceneFileName: String? // TODO: For scenes that should be loaded from .sks files
     
     var scene: Scene? {
-        if let sid = self.sceneIdentifier, let scene = SceneManager.shared.getScene(for: sid) {
+        if let sid = self.sceneKey, let scene = SceneManager.shared.getScene(for: sid) {
             // Use overriding sceneIdentifier
             return scene
         }
         
-        if let scene = SceneManager.shared.getScene(for: self.identifier) {
+        if let scene = SceneManager.shared.getScene(for: self.key) {
             // Use GameState's identifier for convenience
             return scene
         }
         
         return nil
     }
-    
-    public init(_ identifier: GameIdentifier, sceneIdentifier: GameIdentifier? = nil) {
-        self.identifier = identifier
-        self.sceneIdentifier = sceneIdentifier
-        super.init()
-        self.associatedSceneClass = BaseScene.self
+     
+    public init(key: GameStateKey, sceneKey: SceneKey? = nil) {
+        if let sceneKey = sceneKey {
+            self.sceneKey = AnyKey(sceneKey)
+        } else {
+            self.sceneKey = nil
+        }
+        
+        super.init(key: AnyKey(key))
     }
 
-    public convenience init<V: View>(_ identifier: GameIdentifier, sceneIdentifier: GameIdentifier? = nil, view: V) {
-        self.init(identifier, sceneIdentifier: sceneIdentifier)
-        self.associatedSceneClass = BaseScene.self
-        self.associatedSwiftUIView = AnyView(view)
+        public init(key: AnyKey, sceneKey: AnyKey? = nil) {
+        self.sceneKey = sceneKey
+        super.init(key: key)
     }
+
+    public convenience init<V: View>(_ key: AnyKey, sceneKey: AnyKey? = nil, view: V) {
+        self.init(key: key, sceneKey: sceneKey)
+        self.view = AnyView(view)
+    }
+    
+    public convenience init<V: View>(_ key: GameStateKey, sceneKey: SceneKey? = nil, view: V) {
+        self.init(key: key, sceneKey: sceneKey)
+        self.view = AnyView(view)
+    }
+
 }
 
-public enum GameIdentifier: String, RawRepresentable {
+// TODO: figure out the best way to represent the relationship between game state keys and scene keys.
+// Since scenes are constructed with a key that game states can reference, it's convenient when the game state key matches the scene key.
+// However, there's not necessarily a one-to-one relationship between scenes and game states because a single scene could be used by multiple game states.
+// I'd like to have 2 separate enums for scene and game states, but I'd also like to keep the DSL syntax clean for declaring game states and their associated scenes.
+
+public enum GameStateKey: String, KeyProtocol {
     case launch
     case mainMenu
     case lobby

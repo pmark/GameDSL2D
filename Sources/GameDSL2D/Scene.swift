@@ -8,7 +8,7 @@
 import OctopusKit
 
 public class Scene: BaseConstruct, Equatable {
-    var identifier: GameIdentifier
+    var key: AnyKey
 
     var scenarios: [Scenario] = []
     
@@ -26,7 +26,7 @@ public class Scene: BaseConstruct, Equatable {
     }
     
     public static func == (lhs: Scene, rhs: Scene) -> Bool {
-        lhs.identifier == rhs.identifier
+        lhs.key == rhs.key
     }
     
     lazy public var okScene: BaseScene = {
@@ -35,13 +35,26 @@ public class Scene: BaseConstruct, Equatable {
         return scene
     }()
     
-    public init(_ sceneIdentifier: GameIdentifier, data: (() -> GameData)? = nil, @GameConstructBuilder childConstructs: () -> [Any]) {
-        self.identifier = sceneIdentifier
-        super.init(name: "\(sceneIdentifier) scene", data: data, children: childConstructs())
+    public init(key: AnyKey, data: (() -> GameData)? = nil, @GameConstructBuilder childConstructs: () -> [Any]) {
+        self.key = key
+        super.init(name: "\(key.stringValue) scene", data: data, children: childConstructs())
+    }
+    
+    public convenience init(key: SceneKey, data: (() -> GameData)? = nil, @GameConstructBuilder childConstructs: () -> [Any]) {
+        self.init(key: AnyKey(key), data: data, childConstructs: childConstructs)
+    }
+    
+    public init(key: AnyKey, data: (() -> GameData)? = nil) {
+        self.key = key
+        super.init(name: "\(key.stringValue) scene", data: data, children: [])
+    }
+    
+    public convenience init(key: SceneKey, data: (() -> GameData)? = nil) {
+        self.init(key: AnyKey(key), data: data)
     }
     
     public override func didSetParent() {
-        SceneManager.shared.register(self, for: identifier)
+        SceneManager.shared.register(self, for: key)
         scenarios = children(ofType: Scenario.self)
         systemConstruct = children(ofType: Systems.self).last
     }
@@ -62,9 +75,42 @@ public class Scene: BaseConstruct, Equatable {
             okScene.componentTypes.append(componentType)
         }
         
-        // TODO: populate scene
+        // Populate scene with entities
+        for entity in self.entities {
+            if let okEntity = Entity.create(type: entity.type, name: entity.name) {
+                addEntityToScene(okEntity)
+            }
+        }
         
-        // Activation logic for the scene can go here
-        // For example, presenting it
+        // TODO: present scene?
     }
+    
+    func addEntityToScene(_ okEntity: OKEntity) {
+        self.okScene.addEntity(okEntity)
+    }
+    
+    public func configure(_ configuration: (OKScene) -> Void) -> Self {
+        configuration(okScene) 
+        return self
+    }
+    
+    public func onStateEnter(_ state: StateKey, _ handler: @escaping () -> Void) -> Self {
+        // Handle state entering
+        // ...
+        return self
+    }
+}
+
+public enum SceneKey: String, KeyProtocol {
+    case mainMenu
+    case lobby
+    case levelSelect
+    case worldMap
+    case settings
+    case playing
+    case paused
+    case failure
+    case success
+    case cutscene
+    case complete
 }

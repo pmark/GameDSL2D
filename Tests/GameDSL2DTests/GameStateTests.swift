@@ -11,9 +11,9 @@ import OctopusKit
 
 class GameStateTests: XCTestCase {
 
-    let playScene = Scene(.playing) {}
+    let playScene = Scene(key: .playing)
     
-    let pausedScene = Scene(.paused) {}
+    let pausedScene = Scene(key: .paused)
     
     // MARK: - GameState Tests
     
@@ -25,7 +25,7 @@ class GameStateTests: XCTestCase {
     func testGameStateInitialization() {
         let game = Game {
             playScene
-            GameState(.playing)
+            GameState(key: .playing)
         }
         
         // TODO: what if you had multiple scenes in the same game state?
@@ -41,7 +41,7 @@ class GameStateTests: XCTestCase {
 
     func testGameStateWithMissingScene() {
         let game = Game {
-            GameState(.playing)
+            GameState(key: .playing)
         }
         
         // TODO: what if you had multiple scenes in the same game state?

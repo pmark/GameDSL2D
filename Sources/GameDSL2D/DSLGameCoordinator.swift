@@ -8,9 +8,11 @@
 import OctopusKit
 
 class DSLGameCoordinator: OctopusGameCoordinator {
-    private var gameStates: [GameIdentifier: GameState] = [:]
-    
+    private var gameStates: [AnyKey: GameState] = [:]
+    private var activeGameState: GameState?
+
     init(states: [GameState]) {
+        // Use a single dummy state
         super.init(states: [OKGameState()], initialStateClass: OKGameState.self)
         for state in states {
             addState(state)
@@ -18,16 +20,25 @@ class DSLGameCoordinator: OctopusGameCoordinator {
     }
 
     func addState(_ gameState: GameState) {
-        gameStates[gameState.identifier] = gameState
+        gameStates[gameState.key] = gameState
     }
     
-    func enter(_ identifier: GameIdentifier) {
-        guard let gameState = gameStates[identifier] else { return }
+    func enter(_ key: AnyKey) {
+        guard let gameState = gameStates[key] else { return }
         
         if let scene = gameState.scene {
             scene.activate()
             // TODO: Additional logic to transition to the scene
         }
+    }
+    
+    func changeState(to key: AnyKey) {
+        guard let newState = gameStates[key] else { return }
+
+        activeGameState?.triggerOnExit(to: key) // Call the willExit effect
+        newState.triggerOnEnter(from: activeGameState?.key) // Call the didEnter effect
+
+        activeGameState = newState
     }
     
 //    private func enterStateWithScene(_ scene: BaseScene, andSwiftUIView view: AnyView) {

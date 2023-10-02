@@ -7,41 +7,51 @@
 
 import Foundation
 
-enum DSLStateKey: String {
+public class State: BaseConstruct {
+    let key: AnyKey
+    var onEnterAction: ((State) -> Void)?
+    var onExitAction: ((State) -> Void)?
+    
+    init(key: StateKey) {
+        self.key = AnyKey(key)
+        super.init(name: key.stringValue)
+    }
+    
+    init(key: AnyKey) {
+        self.key = key
+        super.init(name: key.stringValue)
+    }
+    
+    func didEnter(from previousStateKey: AnyKey? = nil, action: @escaping (State) -> Void) -> Self {
+        if let key = previousStateKey, key == self.key {
+            self.onEnterAction = action
+        } else if previousStateKey == nil {
+            self.onEnterAction = action
+        }
+        return self
+    }
+    
+    func willExit(to nextStateKey: AnyKey? = nil, action: @escaping (State) -> Void) -> Self {
+        if let key = nextStateKey, key == self.key {
+            self.onExitAction = action
+        } else if nextStateKey == nil {
+            self.onExitAction = action
+        }
+        return self
+    }
+
+    func triggerOnEnter(from previousStateKey: AnyKey? = nil) {
+        onEnterAction?(self)
+    }
+    
+    func triggerOnExit(to nextStateKey: AnyKey? = nil) {
+        onExitAction?(self)
+    }
+}
+
+public enum StateKey: String, KeyProtocol {
     case initializing
     case active
     case inactive
     case finished
 }
-
-public class State: BaseConstruct {
-    let key: DSLStateKey
-    var onEnterAction: ((State) -> Void)?
-    var onExitAction: ((State) -> Void)?
-    
-    init(_ key: DSLStateKey) {
-        self.key = key
-        super.init(name: key.rawValue)
-    }
-    
-    func didEnter(from previousState: DSLStateKey? = nil, action: @escaping (State) -> Void) -> Self {
-        self.onEnterAction = action
-        return self
-    }
-    
-    func willExit(to nextState: DSLStateKey? = nil, action: @escaping (State) -> Void) -> Self {
-        self.onExitAction = action
-        return self
-    }
-    
-    // This method can be used internally to trigger the onEnter action
-    func triggerOnEnter() {
-        onEnterAction?(self)
-    }
-    
-    // This method can be used internally to trigger the onExit action
-    func triggerOnExit() {
-        onExitAction?(self)
-    }
-}
-

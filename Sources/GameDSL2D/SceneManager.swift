@@ -13,7 +13,7 @@ public class SceneManager {
 
     var currentScene: Scene?
     var activeEntities: [Entity] = []
-    private var scenes: [GameIdentifier: Scene] = [:]
+    private var scenes: [AnyKey: Scene] = [:]
     
     private init() {
     }
@@ -22,12 +22,16 @@ public class SceneManager {
         scenes = [:]
     }
     
-    func register(_ scene: Scene, for identifier: GameIdentifier) {
-        scenes[identifier] = scene
+    func register(_ scene: Scene, for key: AnyKey) {
+        scenes[key] = scene
     }
     
-    func getScene(for identifier: GameIdentifier) -> Scene? {
-        return scenes[identifier]
+    func getScene(for key: AnyKey) -> Scene? {
+        return scenes[key]
+    }
+    
+    func getScene(for key: SceneKey) -> Scene? {
+        return scenes[AnyKey(key)]
     }
     
     func addEntity(_ entity: Entity) {

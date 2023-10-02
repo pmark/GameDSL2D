@@ -7,16 +7,11 @@
 
 import SwiftUI
 import OctopusKit
+import GameDSL2D
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
+        DSLGameView(game)
     }
 }
 
@@ -24,4 +19,11 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
+}
+
+let game = Game {
+    Scene(key: .playing) {
+        Entity.player
+    }
+    GameState(.playing)
 }

@@ -12,7 +12,7 @@ class GameManager {
         GameState(.mainMenu, ContentView()) {
             Scene(name: "Scene1") {
                 Scenario(name: "Scenario1") {
-                    Entity(name: "Entity1")
+                    Entity.player
                 }
             }
         }
