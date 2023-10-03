@@ -13,6 +13,16 @@ public class GameState: State {
     var view: AnyView?
 //    let sceneFileName: String? // TODO: For scenes that should be loaded from .sks files
     
+    lazy var okGameState: OKGameState = {
+        if let view = self.view {
+            return OKGameState(
+                associatedSceneClass: BaseScene.self,
+                associatedSwiftUIView: view)
+        } else {
+            return OKGameState(associatedSceneClass: BaseScene.self)
+        }
+    }()
+
     var scene: Scene? {
         if let sid = self.sceneKey, let scene = SceneManager.shared.getScene(for: sid) {
             // Use overriding sceneIdentifier
@@ -31,7 +41,8 @@ public class GameState: State {
         if let sceneKey = sceneKey {
             self.sceneKey = AnyKey(sceneKey)
         } else {
-            self.sceneKey = nil
+            // Use game state key
+            self.sceneKey = AnyKey(key)
         }
         
         super.init(key: AnyKey(key))

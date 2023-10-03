@@ -14,7 +14,8 @@
 		A61D24DF2ABCB0FB0064207F /* GameDSL2D in Resources */ = {isa = PBXBuildFile; fileRef = A61D24DE2ABCB0CA0064207F /* GameDSL2D */; };
 		A61D24E22ABCB2650064207F /* OctopusKit in Frameworks */ = {isa = PBXBuildFile; productRef = A61D24E12ABCB2650064207F /* OctopusKit */; };
 		A61D24E42ABCB33C0064207F /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61D24E32ABCB33C0064207F /* Game.swift */; };
-		A69144522ABCB6EE0075E66E /* GameDSL2D in Frameworks */ = {isa = PBXBuildFile; productRef = A69144512ABCB6EE0075E66E /* GameDSL2D */; };
+		A68525142ACB61A000831648 /* GameDSL2D in Frameworks */ = {isa = PBXBuildFile; productRef = A68525132ACB61A000831648 /* GameDSL2D */; };
+		A685251D2ACB62D100831648 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68525162ACB62D100831648 /* Player.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		A61D24D72ABCB0C00064207F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A61D24DE2ABCB0CA0064207F /* GameDSL2D */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = GameDSL2D; path = ../..; sourceTree = "<group>"; };
 		A61D24E32ABCB33C0064207F /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		A68525162ACB62D100831648 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,7 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A69144522ABCB6EE0075E66E /* GameDSL2D in Frameworks */,
+				A68525142ACB61A000831648 /* GameDSL2D in Frameworks */,
 				A61D24E22ABCB2650064207F /* OctopusKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -61,6 +63,13 @@
 		A61D24CF2ABCB0BE0064207F /* ExampleGameDSL2D */ = {
 			isa = PBXGroup;
 			children = (
+				A68525172ACB62D100831648 /* Assets */,
+				A68525182ACB62D100831648 /* Components */,
+				A68525152ACB62D100831648 /* Entities */,
+				A68525192ACB62D100831648 /* GameStates */,
+				A685251B2ACB62D100831648 /* Scenes */,
+				A685251A2ACB62D100831648 /* Utilities */,
+				A685251C2ACB62D100831648 /* Views */,
 				A61D24D02ABCB0BE0064207F /* ExampleGameDSL2DApp.swift */,
 				A61D24D22ABCB0BE0064207F /* ContentView.swift */,
 				A61D24D42ABCB0C00064207F /* Assets.xcassets */,
@@ -76,6 +85,56 @@
 				A61D24D72ABCB0C00064207F /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A68525152ACB62D100831648 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				A68525162ACB62D100831648 /* Player.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		A68525172ACB62D100831648 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		A68525182ACB62D100831648 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A68525192ACB62D100831648 /* GameStates */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = GameStates;
+			sourceTree = "<group>";
+		};
+		A685251A2ACB62D100831648 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A685251B2ACB62D100831648 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		A685251C2ACB62D100831648 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		A69144502ABCB6EE0075E66E /* Frameworks */ = {
@@ -103,7 +162,7 @@
 			name = ExampleGameDSL2D;
 			packageProductDependencies = (
 				A61D24E12ABCB2650064207F /* OctopusKit */,
-				A69144512ABCB6EE0075E66E /* GameDSL2D */,
+				A68525132ACB61A000831648 /* GameDSL2D */,
 			);
 			productName = ExampleGameDSL2D;
 			productReference = A61D24CD2ABCB0BE0064207F /* ExampleGameDSL2D.app */;
@@ -163,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A685251D2ACB62D100831648 /* Player.swift in Sources */,
 				A61D24D32ABCB0BE0064207F /* ContentView.swift in Sources */,
 				A61D24E42ABCB33C0064207F /* Game.swift in Sources */,
 				A61D24D12ABCB0BE0064207F /* ExampleGameDSL2DApp.swift in Sources */,
@@ -384,7 +444,7 @@
 			package = A61D24E02ABCB2650064207F /* XCRemoteSwiftPackageReference "octopuskit" */;
 			productName = OctopusKit;
 		};
-		A69144512ABCB6EE0075E66E /* GameDSL2D */ = {
+		A68525132ACB61A000831648 /* GameDSL2D */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GameDSL2D;
 		};

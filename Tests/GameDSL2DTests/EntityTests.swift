@@ -25,8 +25,18 @@ final class EntityTests: XCTestCase {
                 TestComponent2(),
             ]}
         }
-        XCTAssertEqual(entity.componentConstructs.count, 1, "Should have 1 component constructs")
+        XCTAssertEqual(entity.componentConstructs.count, 1, "Should have 1 component construct")
         XCTAssertEqual(entity.components.count, 2, "Should have 2 components")
+    }
+    
+    func testOKComponents() {
+        let entity = Entity(type: .player, name: "E") {
+            Components {[
+                SpriteKitComponent(node: SKNode())
+            ]}
+        }
+        XCTAssertEqual(entity.componentConstructs.count, 1, "Should have 1 component construct")
+        XCTAssertEqual(entity.components.count, 1, "Should have 1 component")
     }
     
     func testLazyComponentInitialization() {

@@ -9,7 +9,7 @@
  
  struct ContentView: View {
      var body: some View {
-         DSLGameView {
+         DSLGameView(game:
              Game() {
                  Scene(key: .playing) {
                      Entity(name: "Player") {
@@ -20,7 +20,7 @@
                  }
                  GameState(.playing)
              }
-         }
+         )
      }
  }
 
@@ -29,16 +29,18 @@
 import SwiftUI
 import OctopusKit
 
-struct DSLGameView: View {
-    @StateObject var game: Game
+public struct DSLGameView: View {
+    @StateObject public var game: Game
     
-    init(_ game: Game) {
+    public init(_ game: Game) {
         _game = StateObject(wrappedValue: game)
     }
     
-    var body: some View {
-        OKContainerView()
+    public var body: some View {
+        OKContainerView<DSLGameCoordinator, OctopusViewController>()
             .environmentObject(game.coordinator)
-            .statusBar(hidden: true)
+            .onAppear {
+                game.coordinator.enterInitialState()
+            }
     }
 }

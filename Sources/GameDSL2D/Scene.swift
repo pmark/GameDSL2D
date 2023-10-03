@@ -5,6 +5,7 @@
 //  Created by P. Mark Anderson on 8/31/23.
 //
 
+import GameplayKit
 import OctopusKit
 
 public class Scene: BaseConstruct, Equatable {
@@ -12,7 +13,7 @@ public class Scene: BaseConstruct, Equatable {
 
     var scenarios: [Scenario] = []
     
-    lazy var systems: [OKComponent.Type] = {
+    lazy var systems: [GKComponent.Type] = {
         systemConstruct?.componentTypes ?? []
     }()
     
@@ -29,9 +30,10 @@ public class Scene: BaseConstruct, Equatable {
         lhs.key == rhs.key
     }
     
+    static var sceneSize = CGSize.init(width: 430, height: 932)
+    
     lazy public var okScene: BaseScene = {
-        // TODO: figure out scene size config
-        let scene = BaseScene(size: .init(widthAndHeight: 1000)) //name: self.name ?? "UnnamedScene")
+        let scene = BaseScene(size: Self.sceneSize)
         return scene
     }()
     
@@ -86,6 +88,7 @@ public class Scene: BaseConstruct, Equatable {
     }
     
     func addEntityToScene(_ okEntity: OKEntity) {
+        print("\n\nScene: adding entity \(okEntity)")
         self.okScene.addEntity(okEntity)
     }
     

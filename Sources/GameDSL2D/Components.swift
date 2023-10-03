@@ -1,12 +1,12 @@
-import OctopusKit
+import GameplayKit
 
-typealias ComponentType = OKComponent
+public typealias ComponentType = GKComponent
 
 public class Components: BaseConstruct {
     
     let componentClosures: () -> [ComponentType]
 
-    init(_ builder: @escaping () -> [ComponentType]) {
+    public init(_ builder: @escaping () -> [ComponentType]) {
         self.componentClosures = builder
     }
 
