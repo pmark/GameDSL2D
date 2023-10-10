@@ -8,20 +8,23 @@
 import OctopusKit
 
 public class DSLGameCoordinator: OctopusGameCoordinator {
-    private var gameStates: [AnyKey: GameState] = [:]
-    private var activeGameState: GameState?
+    private var gameStates: [GameState] = []
+    private var activeGameState: GameState? {
+        didSet {
+            oldValue?.triggerOnExit(to: activeGameState?.key) // Call the willExit effect
+            activeGameState?.triggerOnEnter(from: oldValue?.key) // Call the didEnter effect
+        }
+    }
     
     init(states: [GameState]) {
         let okGameStates = states.compactMap { $0.okGameState }
         super.init(states: okGameStates, initialStateClass: OKGameState.self)
-        
-        for state in states {
-            addState(state)
-        }
+        self.gameStates = states
     }
     
-    func addState(_ gameState: GameState) {
-        gameStates[gameState.key] = gameState
+    public func addState(_ gameState: GameState) {
+        print("adding game state \(gameState.key)")
+        gameStates.append(gameState)
     }
     
     public func enterInitialState() {
@@ -32,11 +35,24 @@ public class DSLGameCoordinator: OctopusGameCoordinator {
         
         Scene.sceneSize = skView.bounds.size
         
-        enter(firstState.key)
+        print("\n\n enter first state \(firstState.key)\n\n")
+        enterState(firstState.key)
     }
     
-    func enter(_ key: AnyKey) {
-        guard let gameState = gameStates[key] else { return }
+    public func enterState(_ key: GameStateKey) {
+        self.enterState(AnyKey(key))
+    }
+    
+    private func findState(_ key: AnyKey) -> GameState? {
+        gameStates.first { $0.key == key }
+    }
+    
+    public func enterState(_ key: AnyKey) {
+        print("[DSL] entering game state \(key)")
+        guard let gameState = findState(key) else { return }
+        print("[DSL] found game state \(gameState.key)")
+        
+        self.enter(type(of: gameState.okGameState))
         
         if let scene = gameState.scene {
             print("Activating scene \(String(describing: gameState.sceneKey))")
@@ -49,18 +65,11 @@ public class DSLGameCoordinator: OctopusGameCoordinator {
             scene.activate() // CHECK: possibly present first?
         } else {
             print("Game state \(gameState.key) has no scene")
+            
+            // TODO: clear scene
         }
         
         activeGameState = gameState
-    }
-    
-    func changeState(to key: AnyKey) {
-        guard let newState = gameStates[key] else { return }
-        
-        activeGameState?.triggerOnExit(to: key) // Call the willExit effect
-        newState.triggerOnEnter(from: activeGameState?.key) // Call the didEnter effect
-        
-        activeGameState = newState
     }
     
     //    private func enterStateWithScene(_ scene: BaseScene, andSwiftUIView view: AnyView) {

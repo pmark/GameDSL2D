@@ -1,9 +1,6 @@
 //
 //  BaseConstruct.swift
 //  
-//
-//  Created by P. Mark Anderson on 8/27/23.
-//
 
 import OctopusKit
 
@@ -18,10 +15,8 @@ public class BaseConstruct {
     var data: GameData?
     var children: [Any]
     var isActive: Bool = false
-    
-//    var gameCoordinator: DSLGameCoordinator? {
-//        return OctopusKit.shared.gameCoordinator as? DSLGameCoordinator
-//    }
+    var onActivateClosure: ((BaseConstruct) -> Void)?
+    var onDeactivateClosure: ((BaseConstruct) -> Void)?
     
     weak var parent: BaseConstruct? = nil {
         didSet {
@@ -29,12 +24,8 @@ public class BaseConstruct {
         }
     }
     
-    public static func fn() -> [Any] {
-        []
-    }
-    
-    public init(name: String = "", data: (() -> GameData)? = nil, children: [Any] = []) {
-        self.name = name
+    public init(name: String? = nil, data: (() -> GameData)? = nil, children: [Any] = []) {
+        self.name = name ?? ""
         self.children = children
         
         if let gameData = data {
@@ -55,28 +46,48 @@ public class BaseConstruct {
         self.init(name: name, data: data, children: childConstructs())
     }
     
-    public func didInitialize() {
-        // Default implementation does nothing
-    }
-    
     public func evaluateTriggers() {
         if let triggerData = data {
             triggerData.triggers.forEach { $0.evaluate(using: triggerData) }
         }
     }
     
+    @discardableResult
+    public func onActivate(_ closure: @escaping (BaseConstruct) -> Void) -> Self {
+        self.onActivateClosure = closure
+        return self
+    }
+
+    @discardableResult
+    public func onDeactivate(_ closure: @escaping (BaseConstruct) -> Void) -> Self {
+        self.onDeactivateClosure = closure
+        return self
+    }
+
+    public func onActivate() {
+        self.onActivateClosure?(self)
+    }
+    
+    public func onDeactivate() {
+        self.onDeactivateClosure?(self)
+    }
+    
     public func activate() {
         // This assumes that some child constructs can be "activated" and, if so, activates them
+        print("--BC activate \(self.name)")
         children.compactMap { $0 as? Activatable }.forEach { $0.activate() }
+        onActivate()
     }
     
     public func deactivate() {
         children.compactMap { $0 as? Activatable }.forEach { $0.deactivate() }
+        onDeactivate()
     }
     
-    public func didSetParent() {
-    }
+    public func didSetParent() { }
     
+    public func didInitialize() { }
+
     public func children<T>(ofType type: T.Type) -> [T] {
         return children.compactMap { $0 as? T }
     }

@@ -78,5 +78,6 @@ public enum EntityType: String, KeyProtocol {
     case progressBar
 
     // Other
+    case camera
     case other
 }

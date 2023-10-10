@@ -15,7 +15,7 @@ import GameplayKit
 final class EntityTests: XCTestCase {
     func testEntityInitialization() {
         let entity = Entity(type: .player, name: "E")
-        XCTAssertEqual(entity.componentConstructs.count, 0, "Should have zero component constructs")
+        XCTAssertEqual(entity.componentInitializers.count, 0, "Should have zero component initializers")
     }
     
     func testEntityComponents() {
@@ -25,7 +25,7 @@ final class EntityTests: XCTestCase {
                 TestComponent2(),
             ]}
         }
-        XCTAssertEqual(entity.componentConstructs.count, 1, "Should have 1 component construct")
+        XCTAssertEqual(entity.componentInitializers.count, 2, "Should have 2 component initializers")
         XCTAssertEqual(entity.components.count, 2, "Should have 2 components")
     }
     
@@ -35,7 +35,7 @@ final class EntityTests: XCTestCase {
                 SpriteKitComponent(node: SKNode())
             ]}
         }
-        XCTAssertEqual(entity.componentConstructs.count, 1, "Should have 1 component construct")
+        XCTAssertEqual(entity.componentInitializers.count, 1, "Should have 1 component initializer")
         XCTAssertEqual(entity.components.count, 1, "Should have 1 component")
     }
     

@@ -42,6 +42,10 @@ public struct AnyKey: Hashable {
         self.init(value: key as any KeyProtocol)
     }
     
+    init(_ key: GameEventKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
     init(_ key: SceneKey) {
         self.init(value: key as any KeyProtocol)
     }

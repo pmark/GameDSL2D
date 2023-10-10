@@ -67,7 +67,11 @@ public class Scene: BaseConstruct, Equatable {
         }
     }
 
-    public override func activate() {
+    public override func onActivate() {
+        // CHECK: should this be done last?
+        print("--SCENE onActivate \(name) \(self.key)")
+        super.onActivate()
+        
         // Load the first scenario or a default scenario
         // TODO: determine which scenario should be active
         scenarios.first?.activate()
@@ -79,12 +83,34 @@ public class Scene: BaseConstruct, Equatable {
         
         // Populate scene with entities
         for entity in self.entities {
-            if let okEntity = Entity.create(type: entity.type, name: entity.name) {
-                addEntityToScene(okEntity)
-            }
+            addEntityToScene(entity.okEntity)
         }
         
-        // TODO: present scene?
+        if let scene = self.sceneEntity?[SpriteKitSceneComponent.self]?.scene {
+            assert(scene.isEqual(self.okScene), "Scene#okScene should be the SpriteKitSceneComponent's scene")
+        }
+        
+        // Check if a camera is already set in the SKScene
+//        if let scene = self.sceneEntity?[SpriteKitSceneComponent.self]?.scene, scene.camera == nil {
+//            // Automatically add a DefaultCameraComponent if none exists
+//            self.addComponent(DefaultCameraComponent.self)
+//        }
+    }
+    
+    public override func onDeactivate() {
+        activeScenario?.deactivate()
+        okScene.componentTypes = []
+        
+        // Populate scene with entities
+        for entity in self.entities {
+            self.okScene.removeEntity(entity.okEntity)
+        }
+        
+        super.onDeactivate()
+    }
+    
+    var sceneEntity: OKEntity? {
+        self.okScene.entity as? OKEntity
     }
     
     func addEntityToScene(_ okEntity: OKEntity) {

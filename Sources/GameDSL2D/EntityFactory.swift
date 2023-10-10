@@ -10,8 +10,10 @@ import OctopusKit
 
 public class EntityFactory {
     static let shared = EntityFactory()
-    private var entityRegistry: [AnyKey: [String: Entity]] = [:]
-
+    
+    private typealias EntityDictionary = [String: Entity]
+    private var entityRegistry: [AnyKey: EntityDictionary] = [:]
+    
     private init() {}
     
     public func register(type: EntityType, name: String, entity: Entity) {
@@ -20,17 +22,39 @@ public class EntityFactory {
     
     public func register(type: AnyKey, name: String, entity: Entity) {
         if entityRegistry[type] == nil {
-            entityRegistry[type] = [:]
+            entityRegistry[type] = EntityDictionary()
         }
         entityRegistry[type]?[name] = entity
     }
+    
+    public func findEntity(ofType type: EntityType, withName name: String? = nil) -> Entity? {
+        return self.findEntity(ofType: AnyKey(type), withName: name)
+    }
 
-    public func create(type: AnyKey, name: String? = "") -> OKEntity? {
-        guard let name = name,
-              let rootEntityTemplate = entityRegistry[type],
-              let entityTemplate = rootEntityTemplate[name] else {
+    public func findEntity(ofType type: AnyKey, withName name: String? = nil) -> Entity? {
+        if let group = entityRegistry[type] {
+            if let name = name {
+                return group[name]
+            }
+            
+            if let first = group.keys.first {
+                return group[first]
+            }
+        }
+        return nil
+    }
+
+    /*
+    public func create(type: AnyKey, name: String? = nil) -> OKEntity? {
+        guard let rootEntityTemplate = entityRegistry[type] else {
             return nil
         }
-        return entityTemplate.createOKEntity()
+        let lookupName = name ?? ""
+        guard let entityTemplate = rootEntityTemplate[lookupName] else {
+            return nil
+        }
+        return entityTemplate.createOKEntity() // Ensure this is a deep copy
     }
+    */
+
 }

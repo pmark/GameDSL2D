@@ -43,31 +43,66 @@ func createSpriteNode(from assetName: String) -> SKSpriteNode {
 
 let game = Game {
     Scene(key: .playing) {
-        Entity(type: .player) {
+        Entity(type: .player, name: "Player") {
             Components {[
                 SpriteKitComponent(node: createSpriteNode(from: "knight1")),
             ]}
         }
         
-        Entity(type: .enemy) {
+        Entity(type: .enemy, name: "Enemy") {
             Components {[
                 SpriteKitComponent(node: createShapeNode()),
             ]}
         }
     }
+    
+    GameState(.mainMenu, sceneKey: .playing, view: MainMenuView())
     GameState(.playing, view: PlayUI())
+    
+    // TODO: Transition from .mainMenu to .playing
 }
 
 struct PlayUI: View {
+    @EnvironmentObject var gameCoordinator: DSLGameCoordinator
+    
     var body: some View {
         VStack {
             HStack {
+                Button("Menu") {
+                    gameCoordinator.enterState(.mainMenu)
+                }
+                .padding()
+                .background(Color(red: 0.8, green: 0, blue: 0.5))
+                .clipShape(Capsule())
+
+                
                 Spacer()
                 Text("PlayUI")
                     .foregroundColor(.secondary)
             }
             Spacer()
         }
+        .padding()
+    }
+}
+
+struct MainMenuView: View {
+    @EnvironmentObject var gameCoordinator: DSLGameCoordinator
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Button("Play") {
+                    print("Play button clicked")
+                    gameCoordinator.enterState(.playing)
+                }
+                .padding()
+                .background(Color(red: 0.8, green: 0, blue: 0.5))
+                .clipShape(Capsule())
+            }
+            Spacer()
+        }
+        .background(Color.red)
         .padding()
     }
 }

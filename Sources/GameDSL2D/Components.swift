@@ -4,13 +4,13 @@ public typealias ComponentType = GKComponent
 
 public class Components: BaseConstruct {
     
-    let componentClosures: () -> [ComponentType]
+    let componentsClosure: () -> [ComponentType]
 
     public init(_ builder: @escaping () -> [ComponentType]) {
-        self.componentClosures = builder
+        self.componentsClosure = builder
     }
 
     func instantiateComponents() -> [ComponentType] {
-        return componentClosures()
+        return componentsClosure()
     }
 }
