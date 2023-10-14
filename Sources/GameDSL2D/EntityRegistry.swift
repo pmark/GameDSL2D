@@ -1,6 +1,6 @@
 //
-//  EntityFactory.swift
-//  
+//  EntityRegistry.swift
+//
 //
 //  Created by P. Mark Anderson on 9/28/23.
 //
@@ -8,8 +8,8 @@
 import Foundation
 import OctopusKit
 
-public class EntityFactory {
-    static let shared = EntityFactory()
+public class EntityRegistry {
+    static let shared = EntityRegistry()
     
     private typealias EntityDictionary = [String: Entity]
     private var entityRegistry: [AnyKey: EntityDictionary] = [:]
@@ -27,21 +27,30 @@ public class EntityFactory {
         entityRegistry[type]?[name] = entity
     }
     
-    public func findEntity(ofType type: EntityType, withName name: String? = nil) -> Entity? {
+    public func findEntity(ofType type: EntityType, withName name: String? = "") -> Entity? {
         return self.findEntity(ofType: AnyKey(type), withName: name)
     }
 
     public func findEntity(ofType type: AnyKey, withName name: String? = nil) -> Entity? {
+        // Default name to empty string if none provided
+        let entityName = name ?? ""
+        
+        // Check if the entity type exists in the registry
         if let group = entityRegistry[type] {
-            if let name = name {
-                return group[name]
-            }
             
-            if let first = group.keys.first {
-                return group[first]
+            // Search for the entity by name within the group
+            if let entity = group[entityName] {
+                return entity
+            } else {
+                // Log the event of not finding an entity with that name
+                print("Warning: No entity found with type \(type) and name \(entityName).")
+                return nil
             }
+        } else {
+            // Log the event of not finding an entity group of that type
+            print("Warning: No entity group found for type \(type).")
+            return nil
         }
-        return nil
     }
 
     /*

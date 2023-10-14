@@ -21,7 +21,7 @@ public class Camera: Entity {
 //            }
             
             if let cc = self.okEntity[CameraComponent.self] {
-                cc.nodeToTrack = EntityFactory.shared.findEntity(ofType: .player)?.okEntity.node
+                cc.nodeToTrack = EntityRegistry.shared.findEntity(ofType: .player)?.okEntity.node
             }
         }
     }

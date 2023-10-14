@@ -53,6 +53,7 @@ class TestGameData: GameData {
     
     init(testDataProperty: Int = 10) {
         self.testDataProperty = testDataProperty
+        super.init()
     }
 }
 
@@ -61,6 +62,7 @@ class AnotherGameData: GameData {
     
     init(someValue: String) {
         self.someValue = someValue
+        super.init()
     }
 }
 

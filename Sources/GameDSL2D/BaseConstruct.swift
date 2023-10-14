@@ -2,6 +2,7 @@
 //  BaseConstruct.swift
 //  
 
+import Foundation
 import OctopusKit
 
 protocol Activatable {
@@ -17,6 +18,7 @@ public class BaseConstruct {
     var isActive: Bool = false
     var onActivateClosure: ((BaseConstruct) -> Void)?
     var onDeactivateClosure: ((BaseConstruct) -> Void)?
+    var eventTokens: [String: NSObjectProtocol] = [:]
     
     weak var parent: BaseConstruct? = nil {
         didSet {
@@ -44,6 +46,12 @@ public class BaseConstruct {
      
     public convenience init(name: String = "", data: (() -> GameData)? = nil, @GameConstructBuilder childConstructs: () -> [Any]) {
         self.init(name: name, data: data, children: childConstructs())
+    }
+    
+    deinit {
+        for token in eventTokens.values {
+            NotificationCenter.default.removeObserver(token)
+        }
     }
     
     public func evaluateTriggers() {
@@ -74,12 +82,14 @@ public class BaseConstruct {
     
     public func activate() {
         // This assumes that some child constructs can be "activated" and, if so, activates them
+        isActive = true
         print("--BC activate \(self.name)")
         children.compactMap { $0 as? Activatable }.forEach { $0.activate() }
         onActivate()
     }
     
     public func deactivate() {
+        isActive = false
         children.compactMap { $0 as? Activatable }.forEach { $0.deactivate() }
         onDeactivate()
     }

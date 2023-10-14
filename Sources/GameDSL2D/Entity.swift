@@ -19,12 +19,25 @@ public class Entity: BaseConstruct, Activatable {
     }()
    
     public convenience init(type: EntityType, name: String? = nil, data: (() -> GameData)? = nil) {
-        self.init(type: AnyKey(type), name: name ?? "", data: data)
+//        var extant: Entity? = nil
+//        if data == nil {
+//            extant = EntityRegistry.shared.findEntity(ofType: type, withName: name)
+//        }
+        
+        self.init(type: AnyKey(type), name: name, data: data)
     }
     
-    public init(type: AnyKey, name: String = "", data: (() -> GameData)? = nil) {
+    public init(type: AnyKey, name: String? = nil, data: (() -> GameData)? = nil) {
+//        var extant: Entity? = nil
+        
+//        if data == nil {
+//            extant = EntityRegistry.shared.findEntity(ofType: type, withName: name)
+//        }
+            
         self.type = type
         super.init(name: name, data: data, children: [])
+        
+//        self.merge(extant)
     }
     
     public convenience init(type: EntityType, name: String? = nil, data: (() -> GameData)? = nil, @GameConstructBuilder childConstructs: () -> [Any]) {
@@ -34,6 +47,14 @@ public class Entity: BaseConstruct, Activatable {
     public init(type: AnyKey, name: String? = nil, data: (() -> GameData)? = nil, @GameConstructBuilder childConstructs: () -> [Any]) {
         self.type = type
         super.init(name: name, data: data, children: childConstructs())
+    }
+        
+    private func merge(_ extant: Entity?) {
+        guard let extant = extant else { return }
+        self.data = extant.data
+        self.children = extant.children
+        self.componentInitializers = extant.componentInitializers
+        self._okEntity = extant._okEntity
     }
    
     // Add single component by type with default initializer
@@ -66,7 +87,7 @@ public class Entity: BaseConstruct, Activatable {
         }
         
         // Automatically register the entity for future use
-        EntityFactory.shared.register(type: type, name: self.name, entity: self)
+        EntityRegistry.shared.register(type: type, name: self.name, entity: self)
     }
     
 //    public static func create(type: EntityType, name: String? = "") -> OKEntity? {

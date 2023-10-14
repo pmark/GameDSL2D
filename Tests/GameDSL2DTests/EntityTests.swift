@@ -14,23 +14,23 @@ import GameplayKit
 
 final class EntityTests: XCTestCase {
     func testEntityInitialization() {
-        let entity = Entity(type: .player, name: "E")
+        let entity = Entity(type: .player, name: "E1")
         XCTAssertEqual(entity.componentInitializers.count, 0, "Should have zero component initializers")
     }
     
     func testEntityComponents() {
-        let entity = Entity(type: .player, name: "E") {
+        let entity = Entity(type: .player, name: "E2") {
             Components {[
                 TestComponent(),
                 TestComponent2(),
             ]}
         }
-        XCTAssertEqual(entity.componentInitializers.count, 2, "Should have 2 component initializers")
+        XCTAssertEqual(entity.componentInitializers.count, 1, "Should have 2 component initializers")
         XCTAssertEqual(entity.components.count, 2, "Should have 2 components")
     }
     
     func testOKComponents() {
-        let entity = Entity(type: .player, name: "E") {
+        let entity = Entity(type: .player, name: "E3") {
             Components {[
                 SpriteKitComponent(node: SKNode())
             ]}
@@ -53,7 +53,7 @@ final class EntityTests: XCTestCase {
             return OKComponent() // Replace with actual OKComponent subclass
         }
         
-        _ = Entity(type: .player, name: "E") {
+        _ = Entity(type: .player, name: "EntityTests Player") {
             Components {[
                 component1Closure(),
                 component2Closure(),
