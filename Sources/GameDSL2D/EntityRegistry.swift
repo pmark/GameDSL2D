@@ -8,6 +8,21 @@
 import Foundation
 import OctopusKit
 
+public struct EntityIdentifier: Equatable {
+    let type: AnyKey
+    let name: String
+    
+    public init(type: AnyKey, name: String? = nil) {
+        self.type = type
+        self.name = name ?? ""
+    }
+    
+    // Convenience initializer for EntityType
+    public init(type: EntityType, name: String? = nil) {
+        self.init(type: AnyKey(type), name: name)
+    }
+}
+
 public class EntityRegistry {
     static let shared = EntityRegistry()
     
@@ -27,10 +42,18 @@ public class EntityRegistry {
         entityRegistry[type]?[name] = entity
     }
     
+    public func register(identifier: EntityIdentifier, entity: Entity) {
+        register(type: identifier.type, name: identifier.name, entity: entity)
+    }
+ 
+    public func findEntity(with identifier: EntityIdentifier) -> Entity? {
+        return self.findEntity(ofType: identifier.type, withName: identifier.name)
+    }
+    
     public func findEntity(ofType type: EntityType, withName name: String? = "") -> Entity? {
         return self.findEntity(ofType: AnyKey(type), withName: name)
     }
-
+    
     public func findEntity(ofType type: AnyKey, withName name: String? = nil) -> Entity? {
         // Default name to empty string if none provided
         let entityName = name ?? ""
@@ -53,7 +76,10 @@ public class EntityRegistry {
         }
     }
 
+}
+
     /*
+     // CHECK: When would this be necessary?
     public func create(type: AnyKey, name: String? = nil) -> OKEntity? {
         guard let rootEntityTemplate = entityRegistry[type] else {
             return nil
@@ -65,5 +91,3 @@ public class EntityRegistry {
         return entityTemplate.createOKEntity() // Ensure this is a deep copy
     }
     */
-
-}

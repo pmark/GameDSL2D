@@ -37,20 +37,27 @@ public class GameState: State {
         return nil
     }
      
-    public init(key: GameStateKey, sceneKey: SceneKey? = nil) {
+    public init(key: AnyKey, sceneKey: AnyKey? = nil) {
         if let sceneKey = sceneKey {
-            self.sceneKey = AnyKey(sceneKey)
+            self.sceneKey = sceneKey
         } else {
             // Use game state key
-            self.sceneKey = AnyKey(key)
+            self.sceneKey = key
         }
         
-        super.init(key: AnyKey(key))
+        super.init(key: key)
     }
 
-        public init(key: AnyKey, sceneKey: AnyKey? = nil) {
-        self.sceneKey = sceneKey
-        super.init(key: key)
+    public convenience init(key: GameStateKey, sceneKey: SceneKey? = nil) {
+        if let sceneKey = sceneKey {
+            self.init(key: AnyKey(key), sceneKey: AnyKey(sceneKey))
+        } else {
+            self.init(key: AnyKey(key))
+        }
+    }
+
+    public convenience init(key: String, sceneKey: AnyKey? = nil) {
+        self.init(key: AnyKey(key), sceneKey: sceneKey)
     }
 
     public convenience init<V: View>(_ key: AnyKey, sceneKey: AnyKey? = nil, view: V) {

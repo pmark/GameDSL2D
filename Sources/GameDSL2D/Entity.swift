@@ -115,6 +115,14 @@ public class Entity: BaseConstruct, Activatable {
         super.onDeactivate()
         uninstantiate()
     }
+    
+    public func getSceneComponent() -> SpriteKitSceneComponent? {
+        self.okEntity[SpriteKitSceneComponent.self]
+    }
+    
+    public func getScene() -> OKScene? {
+        getSceneComponent()?.scene
+    }
 }
 
 extension BaseConstruct {

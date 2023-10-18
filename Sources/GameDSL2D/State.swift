@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class State: BaseConstruct {
+public class State: BaseConstruct, Equatable {
     let key: AnyKey
     var onEnterAction: ((State) -> Void)?
     var onExitAction: ((State) -> Void)?
@@ -22,6 +22,10 @@ public class State: BaseConstruct {
         super.init(name: key.stringValue)
     }
     
+    public static func == (lhs: State, rhs: State) -> Bool {
+        lhs.key == rhs.key
+    }
+
     func didEnter(from previousStateKey: AnyKey? = nil, action: @escaping (State) -> Void) -> Self {
         if let key = previousStateKey, key == self.key {
             self.onEnterAction = action

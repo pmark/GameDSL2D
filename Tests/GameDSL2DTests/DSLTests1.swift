@@ -98,6 +98,10 @@ class TestComponent: ComponentType {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func didAddToEntity() {
+        EventManager.shared.postEvent(.playerScored, userInfo: ["score": 100])
+    }
 }
 
 class TestComponent2: ComponentType {
@@ -113,6 +117,9 @@ class TestComponent2: ComponentType {
 let playScene = Scene(key: .playing) {
     Entity(type: .player, name: "Player") {
         TestComponent()
+    }
+    .onEvent(.playerScored) { construct, eventInfo in
+        print("Player scored: \(eventInfo ?? [:])")
     }
 
     Entity(type: .obstacle, name: "Obstacle") {

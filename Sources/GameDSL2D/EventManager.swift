@@ -19,12 +19,12 @@ class EventManager {
 
     
     // For Notification.Name
-    func postEvent(_ name: Notification.Name, target: BaseConstruct?, userInfo: EventInfo?) {
+    func postEvent(_ name: Notification.Name, target: BaseConstruct? = nil, userInfo: EventInfo?) {
         NotificationCenter.default.post(name: name, object: target, userInfo: userInfo)
     }
 
     // For String
-    func postEvent(_ name: String, target: BaseConstruct?, userInfo: EventInfo?) {
+    func postEvent(_ name: String, target: BaseConstruct? = nil, userInfo: EventInfo?) {
         postEvent(Notification.Name(rawValue: name), target: target, userInfo: userInfo)
     }
     

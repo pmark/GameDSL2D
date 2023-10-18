@@ -7,50 +7,62 @@
 
 import Foundation
 
+
 public protocol KeyProtocol: Equatable {
     var stringValue: String { get }
 }
 
-extension KeyProtocol {
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
-        return lhs.stringValue == rhs.stringValue
-    }
+//extension KeyProtocol {
+//    public static func ==(lhs: Self, rhs: Self) -> Bool {
+//        return lhs.stringValue == rhs.stringValue
+//    }
+//}
+
+extension String: KeyProtocol {
+    public var stringValue: String { self }
 }
 
-public struct AnyKey: Hashable {
+public struct AnyKey: Hashable, Equatable {
     public let value: any KeyProtocol
-    
     public var stringValue: String { value.stringValue }
     
-    public init(value: any KeyProtocol) {
+    public init<T: KeyProtocol>(value: T) {
         self.value = value
-    }
-    
-    public static func ==(lhs: AnyKey, rhs: AnyKey) -> Bool {
-        return lhs.value.stringValue == rhs.value.stringValue
     }
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(value.stringValue)
     }
     
-    init(_ key: StateKey) {
+    public static func == (lhs: AnyKey, rhs: AnyKey) -> Bool {
+        lhs.stringValue == rhs.stringValue
+    }
+    
+    public init(value: any KeyProtocol) {
+        self.value = value
+    }
+    
+    public init(_ key: String) {
         self.init(value: key as any KeyProtocol)
     }
     
-    init(_ key: GameStateKey) {
+    public init(_ key: StateKey) {
         self.init(value: key as any KeyProtocol)
     }
     
-    init(_ key: GameEventKey) {
+    public init(_ key: GameStateKey) {
         self.init(value: key as any KeyProtocol)
     }
     
-    init(_ key: SceneKey) {
+    public init(_ key: GameEventKey) {
         self.init(value: key as any KeyProtocol)
     }
     
-    init(_ key: EntityType) {
+    public init(_ key: SceneKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    public init(_ key: EntityType) {
         self.init(value: key as any KeyProtocol)
     }
 }

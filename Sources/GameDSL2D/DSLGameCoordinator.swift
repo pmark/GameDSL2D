@@ -6,10 +6,12 @@
 //
 
 import OctopusKit
+import SpriteKit
 
 public class DSLGameCoordinator: OctopusGameCoordinator {
-    private var gameStates: [GameState] = []
-    private var activeGameState: GameState? {
+    public var gameStates: [GameState] = []
+    
+    public var activeGameState: GameState? {
         didSet {
             oldValue?.triggerOnExit(to: activeGameState?.key) // Call the willExit effect
             activeGameState?.triggerOnEnter(from: oldValue?.key) // Call the didEnter effect
@@ -20,6 +22,11 @@ public class DSLGameCoordinator: OctopusGameCoordinator {
         let okGameStates = states.compactMap { $0.okGameState }
         super.init(states: okGameStates, initialStateClass: OKGameState.self)
         self.gameStates = states
+
+        if let skView = spriteKitView {
+            // CHECK: is the timing right?
+            Scene.sceneSize = skView.bounds.size
+        }
     }
     
     public func addState(_ gameState: GameState) {
@@ -29,11 +36,11 @@ public class DSLGameCoordinator: OctopusGameCoordinator {
     
     public func enterInitialState() {
         guard
-            let firstState = gameStates.first,
-            let skView = spriteKitView
+            let firstState = gameStates.first
+//            let skView = spriteKitView
         else { return }
         
-        Scene.sceneSize = skView.bounds.size
+//        Scene.sceneSize = skView.bounds.size
         
         print("\n\n enter first state \(firstState.key)\n\n")
         enterState(firstState.key)
@@ -45,6 +52,10 @@ public class DSLGameCoordinator: OctopusGameCoordinator {
     
     private func findState(_ key: AnyKey) -> GameState? {
         gameStates.first { $0.key == key }
+    }
+    
+    public func enterState(_ key: String) {
+        enterState(AnyKey(key))
     }
     
     public func enterState(_ key: AnyKey) {
@@ -77,4 +88,14 @@ public class DSLGameCoordinator: OctopusGameCoordinator {
     // It will leverage the capabilities provided by OctopusGameCoordinator
     // and ensure the transition is smooth.
     //    }
+}
+
+protocol SpriteKitViewProvider {
+    func getSpriteKitView() -> SKView?
+}
+
+extension DSLGameCoordinator: SpriteKitViewProvider {
+    func getSpriteKitView() -> SKView? {
+        return self.spriteKitView
+    }
 }

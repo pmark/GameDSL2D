@@ -29,6 +29,7 @@ class GameStateTests: XCTestCase {
         }
         
         // TODO: what if you had multiple scenes in the same game state?
+        game.activate()
 
         if let gameState = game.gameStates.first {
             XCTAssertNotNil(gameState.scene)
