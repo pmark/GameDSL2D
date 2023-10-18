@@ -35,6 +35,15 @@ final class DSLTests1: XCTestCase {
                     Components {[
                         TestComponent()
                     ]}
+                    
+                    State(key: .active)
+                        .didEnter { state in
+                            if let e = state.parent as? GameDSL2D.Entity {
+                                e.addComponents({[
+                                    TestComponent2()
+                                ]})
+                            }
+                        }
                 }
             }
 

@@ -37,7 +37,11 @@ public class Trigger<T: GameData>: BaseConstruct, Activatable, AnyTrigger {
     }
 
     func check(using data: GameData) -> Bool {
-        return condition(data as! T)
+        if let data = data as? T {
+            // TODO: warn
+            return condition(data)
+        }
+        return false
     }
     
     func evaluate(using data: GameData) {
@@ -48,7 +52,12 @@ public class Trigger<T: GameData>: BaseConstruct, Activatable, AnyTrigger {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: event.stringValue), object: nil)
                 print("Triggered event: \(event)")
             }
-            action?(data as! T)
+            
+            if let data = data as? T {
+                action?(data)
+            } else {
+                // TODO: warn
+            }
         }
     }
     

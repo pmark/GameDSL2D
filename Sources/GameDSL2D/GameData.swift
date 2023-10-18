@@ -18,12 +18,14 @@ import Combine
          "health": 100
      ])
      .set("weapon", value: "Sword") // sets a String
-     Trigger { gameData in
+ 
+     Trigger(emit: .swordEvent, when: { gameData in
          // Gets type-safe values
          let position: [Int]? = gameData.get("position")
          let weapon: String? = gameData.get("weapon")
          // ...
-     }
+     })
+ 
      // ...
  }
  
@@ -63,5 +65,4 @@ public class GameData: ObservableObject {
     func get<T>(_ key: String) -> T? {
         return data[key] as? T
     }
-    
 }
