@@ -11,12 +11,12 @@ import XCTest
 final class SystemsTests: XCTestCase {
 
     func testSystemsInitialization() {
-        let systems = Systems(name: "")
+        let systems = Systems()
         XCTAssertNotNil(systems)
     }
     
     func testComponentTypes() {
-        let systems = Systems(name: "") {
+        let systems = Systems {
             TestComponent.self
         }
         

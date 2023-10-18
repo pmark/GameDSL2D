@@ -34,11 +34,11 @@ final class ScenarioTests: XCTestCase {
             data: { TestGameData(testDataProperty: 10) }
         ) {
             Trigger(
-                event: .gameOver,
-                action: { (data: TestGameData) in
+                emit: .gameOver,
+                perform: { (data: TestGameData) in
                     print("action data \(data)")
                 },
-                condition: { (data: TestGameData) in data.testDataProperty == 10 })
+                when: { (data: TestGameData) in data.testDataProperty == 10 })
         }
         
         if let data = scenario.data as? TestGameData {

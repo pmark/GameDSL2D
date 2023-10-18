@@ -14,10 +14,10 @@ public class Scene: BaseConstruct, Equatable {
     var scenarios: [Scenario] = []
     
     lazy var systems: [GKComponent.Type] = {
-        systemConstruct?.componentTypes ?? []
+        systemsConstruct?.componentTypes ?? []
     }()
     
-    public var systemConstruct: Systems?
+    public var systemsConstruct: Systems?
     
     var activeScenario: Scenario? {
         didSet {
@@ -58,7 +58,7 @@ public class Scene: BaseConstruct, Equatable {
     public override func didSetParent() {
         SceneManager.shared.register(self, for: key)
         scenarios = children(ofType: Scenario.self)
-        systemConstruct = children(ofType: Systems.self).last
+        systemsConstruct = children(ofType: Systems.self).last
     }
     
     func activateScenario(named name: String) {

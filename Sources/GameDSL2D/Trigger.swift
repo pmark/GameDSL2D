@@ -15,15 +15,15 @@ public class Trigger<T: GameData>: BaseConstruct, Activatable, AnyTrigger {
     let event: AnyKey?
     let action: ((T) -> Void)?
     
-    convenience init(event: GameEventKey?, action: ((T) -> Void)? = nil, condition: @escaping (T) -> Bool) {
+    convenience init(emit event: GameEventKey?, perform action: ((T) -> Void)? = nil, when condition: @escaping (T) -> Bool) {
         if let gameEvent = event {
-            self.init(event: AnyKey(gameEvent), action: action, condition: condition)
+            self.init(emit: AnyKey(gameEvent), perform: action, when: condition)
         } else {
-            self.init(action: action, condition: condition)
+            self.init(perform: action, when: condition)
         }
     }
     
-    init(event: AnyKey? = nil, action: ((T) -> Void)? = nil, condition: @escaping (T) -> Bool) {
+    init(emit event: AnyKey? = nil, perform action: ((T) -> Void)? = nil, when condition: @escaping (T) -> Bool) {
         assert(event != nil || action != nil, "Either event or action must be specified.")
         self.condition = condition
         self.event = event

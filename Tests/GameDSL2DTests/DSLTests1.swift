@@ -28,21 +28,21 @@ final class DSLTests1: XCTestCase {
         silencio()
     }
     
-//    func testBasicGame() {
-//        let game = Game(name: "Alien Invasion") {
-//            Scene(key: AnyKey(SceneKey.playing)) {
-//                Entity(type: .player, name: "Player") {
-//                    Components {[
-//                        TestComponent()
-//                    ]}
-//                }
-//            }
-//
-//            GameState(key: .playing)
-//        }
-//
-//        XCTAssertNotNil(game)
-//    }
+    func testBasicGame() {
+        let game = Game(name: "Alien Invasion") {
+            Scene(key: .playing) {
+                Entity(type: .player) {
+                    Components {[
+                        TestComponent()
+                    ]}
+                }
+            }
+
+            GameState(key: .playing)
+        }
+
+        XCTAssertNotNil(game)
+    }
 }
 
 class TestScene1: OKScene { }
