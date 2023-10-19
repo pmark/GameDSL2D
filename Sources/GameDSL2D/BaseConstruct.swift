@@ -13,11 +13,11 @@ protocol Activatable {
 
 public class BaseConstruct {
     var name: String
-    var data: GameData?
-    var children: [Any]
+    var data: GameData? = nil
+    var children: [Any] = []
     var isActive: Bool = false
-    var onActivateClosure: ((BaseConstruct) -> Void)?
-    var onDeactivateClosure: ((BaseConstruct) -> Void)?
+    var onActivateClosure: ((BaseConstruct) -> Void)? = nil
+    var onDeactivateClosure: ((BaseConstruct) -> Void)? = nil
     var eventTokens: [String: NSObjectProtocol] = [:]
     
     weak var parent: BaseConstruct? = nil {

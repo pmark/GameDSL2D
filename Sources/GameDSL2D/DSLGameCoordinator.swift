@@ -25,6 +25,8 @@ public class DSLGameCoordinator: OctopusGameCoordinator {
 
         if let skView = spriteKitView {
             // CHECK: is the timing right?
+            
+            print("TODO: if scene size is wrong, look here")
             Scene.sceneSize = skView.bounds.size
         }
     }

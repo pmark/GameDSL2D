@@ -28,6 +28,7 @@ public class Entity: BaseConstruct, Activatable {
     }
     
     public init(type: AnyKey, name: String? = nil, data: (() -> GameData)? = nil) {
+        // TODO: Use extant entity if already registered and data is not given
 //        var extant: Entity? = nil
         
 //        if data == nil {
@@ -60,7 +61,7 @@ public class Entity: BaseConstruct, Activatable {
     // Add single component by type with default initializer
     @discardableResult
     func addComponent<T>(_ componentType: T.Type) -> Self where T: ComponentType {
-        self.componentInitializers.append(ComponentInitializer(single: { componentType.init() }))
+        self.componentInitializers.append(ComponentInitializer(type: componentType))
         return self
     }
     
@@ -132,16 +133,22 @@ extension BaseConstruct {
 }
 
 public struct ComponentInitializer {
+    let type: ComponentType.Type?
     let single: (() -> ComponentType)?
     let multi: (() -> [ComponentType])?
     
-    init(single: (() -> ComponentType)? = nil, multi: (() -> [ComponentType])? = nil) {
+    init(type: ComponentType.Type? = nil, single: (() -> ComponentType)? = nil, multi: (() -> [ComponentType])? = nil) {
+        self.type = type
         self.single = single
         self.multi = multi
     }
     
     func instantiate() -> [ComponentType] {
         var combined: [ComponentType] = []
+        
+        if let type = self.type {
+            combined.append(type.init())
+        }
         
         if let single = self.single {
             combined.append(single())

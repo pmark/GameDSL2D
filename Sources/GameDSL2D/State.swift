@@ -11,6 +11,8 @@ public class State: BaseConstruct, Equatable {
     let key: AnyKey
     var onEnterAction: ((State) -> Void)?
     var onExitAction: ((State) -> Void)?
+    var componentsToAddOnEntry: [ComponentInitializer] = []
+    var componentTypesToRemoveOnExit: [ComponentType.Type] = []
     
     init(key: StateKey) {
         self.key = AnyKey(key)
@@ -43,12 +45,48 @@ public class State: BaseConstruct, Equatable {
         }
         return self
     }
+    
+    @discardableResult
+    func componentsToAddOnEntry(_ batch: @escaping () -> [ComponentType]) -> Self {
+        self.componentsToAddOnEntry.append(ComponentInitializer(multi: batch))
+        return self
+    }
+    
+    @discardableResult
+    func componentsToAddOnEntry(_ componentTypes: ComponentType.Type...) -> Self {
+        for type in componentTypes {
+            let ci = ComponentInitializer(type: type)
+            self.componentsToAddOnEntry.append(ci)
+        }
+        return self
+    }
+    
+    @discardableResult
+    func componentTypesToRemoveOnExit(_ componentTypes: ComponentType.Type...) -> Self {
+        self.componentTypesToRemoveOnExit += componentTypes
+        return self
+    }
 
     func triggerOnEnter(from previousStateKey: AnyKey? = nil) {
+        // Handle adding components
+        // What about Scenario, Scene, Level, etc?
+        // Maybe any construct can have entities added as children?
+        if let entity = parent as? Entity {
+            let components = componentsToAddOnEntry.flatMap { ci in
+                ci.instantiate()
+            }
+            entity.okEntity.addComponents(components)
+        }
+        
         onEnterAction?(self)
     }
     
     func triggerOnExit(to nextStateKey: AnyKey? = nil) {
+        // Handle removing components
+        if let entity = parent as? Entity {
+            entity.okEntity.removeComponents(ofTypes: componentTypesToRemoveOnExit)
+        }
+        
         onExitAction?(self)
     }
 }
