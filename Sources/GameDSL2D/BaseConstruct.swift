@@ -5,12 +5,6 @@
 import Foundation
 import OctopusKit
 
-protocol Activatable {
-    var isActive: Bool { get set }
-    func activate()
-    func deactivate()
-}
-
 public class BaseConstruct {
     var name: String
     var data: GameData? = nil

@@ -28,6 +28,8 @@ final class DSLTests1: XCTestCase {
         silencio()
     }
     
+    let states: [PlayerStateKey] = [.alive, .dead, .spectating, .respawnable, .respawning]
+    
     func testBasicGame() {
         let game = Game(name: "Alien Invasion") {
             Scene(key: .playing) {
@@ -35,6 +37,10 @@ final class DSLTests1: XCTestCase {
                     Components {[
                         TestComponent()
                     ]}
+                    
+                    states.compactMap { key in
+                        State(key: key)
+                    }
                     
                     State(key: .active)
                         .didEnter { state in
@@ -51,6 +57,11 @@ final class DSLTests1: XCTestCase {
         }
 
         XCTAssertNotNil(game)
+        let player = game.scenes.first?.firstEntity(withIdentifier: EntityIdentifier(type: .player))
+        XCTAssertNotNil(player)
+        
+        // TODO: Rework @GameConstructBuilder to support composite constructs in the builder block.
+//        XCTAssertEqual(player?.states.count, states.count + 1)
     }
 }
 
