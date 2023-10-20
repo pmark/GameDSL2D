@@ -1,5 +1,7 @@
 ### Entity States
 
+[See EntityStateKey.swift](./Sources/GameDSL2D/EntityStateKey.swift) for enums with many common entity states.
+
 #### Available State Categories:
 
 1. **EntityStateKey**: General-purpose states applicable to many types of entities.

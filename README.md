@@ -147,7 +147,7 @@ Game {
 
 ## Entity States
 
-[See a complete list of convenient built-in states](/blob/main/EntityStates.md), and learn how to create your own.
+[See a complete list of convenient built-in states](./EntityStates.md), and learn how to create your own.
 
 ## Contribution
 
