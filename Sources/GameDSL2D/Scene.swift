@@ -8,10 +8,12 @@
 import GameplayKit
 import OctopusKit
 
-public class Scene: BaseConstruct, Equatable, AutoEntityCreatable {
+public class Scene: BaseConstruct, Equatable, AutoEntityCreatable, Stateful {
     public var key: AnyKey
     public var scenarios: [Scenario] = []
     public var autoCreatedEntities: [Entity] = []
+    public var states: [AnyKey: State] = [:]
+    public var currentState: State?
     
     lazy var systems: [GKComponent.Type] = {
         systemsConstruct?.componentTypes ?? []

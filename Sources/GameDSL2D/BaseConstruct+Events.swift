@@ -15,9 +15,17 @@ extension BaseConstruct {
         return onEvent(name.rawValue, perform: closure)
     }
     
+    // For Notification.Name
+//    @discardableResult
+//    public func onEvent<T: Stateful>(_ name: Notification.Name, perform handler: @escaping (T, EventInfo?) -> Void) -> Self {
+//        return onEvent(name.rawValue, perform: handler)
+//    }
+
+    
     // For String
-    public func onEvent(_ name: String, perform closure: @escaping (BaseConstruct, EventInfo?) -> Void) -> Self {
-        EventManager.shared.subscribe(self, to: name, using: closure)
+    @discardableResult
+    public func onEvent(_ name: String, perform handler: @escaping (BaseConstruct, EventInfo?) -> Void) -> Self {
+        EventManager.shared.subscribe(self, to: name, using: handler)
         return self
     }
     

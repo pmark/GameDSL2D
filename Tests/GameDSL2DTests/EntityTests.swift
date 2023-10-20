@@ -110,5 +110,25 @@ final class EntityTests: XCTestCase {
             XCTFail("Expected AnotherGameData type")
         }
     }
+    
+    func testEntityState() {
+        let entity = Entity(
+            type: .player,
+            name: "Test Entity",
+            data: { TestGameData(testDataProperty: 3) }
+        ) {
+            State(key: .alive)
+            State(key: .dead)
+            
+            Trigger<TestGameData>(emit: .gameOver) { testGameData in
+                testGameData.testDataProperty == 0
+            }
+        }
+            .setStateOn(event: .gameOver, to: AnyKey(.dead))
+        
+        XCTAssertEqual(entity.states.count, 2)
+        XCTAssertEqual(entity.data?.triggers.count, 1)
+        XCTAssertEqual(entity.eventTokens.count, 1)
+    }
 }
 

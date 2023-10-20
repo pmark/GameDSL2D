@@ -2,7 +2,7 @@ import GameplayKit
 import OctopusKit
 import Foundation
 
-public class Entity: BaseConstruct, Activatable {
+public class Entity: BaseConstruct, Activatable, Stateful {
     public let type: AnyKey
     public var componentInitializers: [ComponentInitializer] = []
     private var _okEntity: OKEntity? = nil
