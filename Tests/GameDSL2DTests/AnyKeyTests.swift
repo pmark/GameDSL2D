@@ -8,18 +8,7 @@
 import XCTest
 @testable import GameDSL2D
 
-extension AnyKey {
-    init(_ key: AnyKeyTests.MockStateKey) {
-        self.init(value: key as any KeyProtocol)
-    }
-}
-
 class AnyKeyTests: XCTestCase {
-    
-    enum MockStateKey: String, KeyProtocol {
-        case loading = "Loading"
-        case running = "Running"
-    }
     
     func testEqualityWithStrings() {
         let anyKey1 = AnyKey("Testing")
@@ -29,8 +18,8 @@ class AnyKeyTests: XCTestCase {
     }
     
     func testEqualityWithEnum() {
-        let anyKey1 = AnyKey(MockStateKey.loading)
-        let anyKey2 = AnyKey(.loading)
+        let anyKey1 = AnyKey(.alive)
+        let anyKey2 = AnyKey(.alive)
         
         XCTAssertEqual(anyKey1, anyKey2)
     }
@@ -50,7 +39,7 @@ class AnyKeyTests: XCTestCase {
     }
     
     func testStringValue() {
-        let anyKey = AnyKey(MockStateKey.loading)
-        XCTAssertEqual(anyKey.stringValue, "Loading")
+        let anyKey = AnyKey(.loading)
+        XCTAssertEqual(anyKey.stringValue, "loading")
     }
 }

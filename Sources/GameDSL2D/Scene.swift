@@ -8,10 +8,10 @@
 import GameplayKit
 import OctopusKit
 
-public class Scene: BaseConstruct, Equatable {
-    var key: AnyKey
-
-    var scenarios: [Scenario] = []
+public class Scene: BaseConstruct, Equatable, AutoEntityCreatable {
+    public var key: AnyKey
+    public var scenarios: [Scenario] = []
+    public var autoCreatedEntities: [Entity] = []
     
     lazy var systems: [GKComponent.Type] = {
         systemsConstruct?.componentTypes ?? []
@@ -123,7 +123,7 @@ public class Scene: BaseConstruct, Equatable {
         return self
     }
     
-    public func onStateEnter(_ state: StateKey, _ handler: @escaping () -> Void) -> Self {
+    public func onStateEnter(_ state: AnyKey, _ handler: @escaping () -> Void) -> Self {
         // Handle state entering
         // ...
         return self

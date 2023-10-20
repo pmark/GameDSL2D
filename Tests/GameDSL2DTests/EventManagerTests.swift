@@ -52,7 +52,11 @@ class EventManagerTests: XCTestCase {
         
         let anotherConstruct = BaseConstruct()
         
-        construct.onEvent(.scoreUpdate) { _, _ in
+        let construct = BaseConstruct()
+        construct.onEvent(.scoreUpdate) { construct, _ in
+            if let entity = construct as? Entity {
+                entity.enterConditionState(.poisoned)
+            }
             expectation.fulfill()
         }
         

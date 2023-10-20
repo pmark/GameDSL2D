@@ -13,31 +13,7 @@ public class GameState: State {
     var view: AnyView?
 //    let sceneFileName: String? // TODO: For scenes that should be loaded from .sks files
     
-    lazy var okGameState: OKGameState = {
-        if let view = self.view {
-            return OKGameState(
-                associatedSceneClass: BaseScene.self,
-                associatedSwiftUIView: view)
-        } else {
-            return OKGameState(associatedSceneClass: BaseScene.self)
-        }
-    }()
-
-    var scene: Scene? {
-        if let sid = self.sceneKey, let scene = SceneManager.shared.getScene(for: sid) {
-            // Use overriding sceneIdentifier
-            return scene
-        }
-        
-        if let scene = SceneManager.shared.getScene(for: self.key) {
-            // Use GameState's identifier for convenience
-            return scene
-        }
-        
-        return nil
-    }
-     
-    public init(key: AnyKey, sceneKey: AnyKey? = nil) {
+   public init(key: AnyKey, sceneKey: AnyKey? = nil) {
         if let sceneKey = sceneKey {
             self.sceneKey = sceneKey
         } else {
@@ -70,6 +46,29 @@ public class GameState: State {
         self.view = AnyView(view)
     }
 
+        lazy var okGameState: OKGameState = {
+        if let view = self.view {
+            return OKGameState(
+                associatedSceneClass: BaseScene.self,
+                associatedSwiftUIView: view)
+        } else {
+            return OKGameState(associatedSceneClass: BaseScene.self)
+        }
+    }()
+
+    var scene: Scene? {
+        if let sid = self.sceneKey, let scene = SceneManager.shared.getScene(for: sid) {
+            // Use overriding sceneIdentifier
+            return scene
+        }
+        
+        if let scene = SceneManager.shared.getScene(for: self.key) {
+            // Use GameState's identifier for convenience
+            return scene
+        }
+        
+        return nil
+    }
 }
 
 // TODO: figure out the best way to represent the relationship between game state keys and scene keys.
@@ -81,6 +80,7 @@ public enum GameStateKey: String, KeyProtocol {
     case launch
     case mainMenu
     case lobby
+    case levelLoading
     case levelSelect
     case settings
     case playing
@@ -89,5 +89,10 @@ public enum GameStateKey: String, KeyProtocol {
     case success
     case minorTransition
     case majorTransition
-    case complete
+    case gameOver
+    case gameWin
+    case leaderboard
+    case tutorial
+    case cutscene
+    case adPlaying
 }

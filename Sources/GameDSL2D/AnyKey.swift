@@ -42,29 +42,6 @@ public struct AnyKey: Hashable, Equatable {
         self.value = value
     }
     
-    public init(_ key: String) {
-        self.init(value: key as any KeyProtocol)
-    }
-    
-    public init(_ key: StateKey) {
-        self.init(value: key as any KeyProtocol)
-    }
-    
-    public init(_ key: GameStateKey) {
-        self.init(value: key as any KeyProtocol)
-    }
-    
-    public init(_ key: GameEventKey) {
-        self.init(value: key as any KeyProtocol)
-    }
-    
-    public init(_ key: SceneKey) {
-        self.init(value: key as any KeyProtocol)
-    }
-    
-    public init(_ key: EntityType) {
-        self.init(value: key as any KeyProtocol)
-    }
 }
 
 extension RawRepresentable where RawValue == String {
@@ -72,3 +49,102 @@ extension RawRepresentable where RawValue == String {
         return self.rawValue
     }
 }
+
+public extension AnyKey {
+    init(_ key: String) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: GameStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: GameEventKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: SceneKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: EntityType) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: EntityStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: EnemyStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: FlyingStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: VehicleStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: PlayerStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: ItemStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: SceneStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: EconomicStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: PuzzleStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: StrategyStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: AnimationStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: MultiplayerStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: WeatherStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: NarrativeStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: MotionStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: ConditionStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: ProjectileStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: SpecialStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+    
+    init(_ key: ScenarioStateKey) {
+        self.init(value: key as any KeyProtocol)
+    }
+}
+

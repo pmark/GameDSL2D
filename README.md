@@ -145,6 +145,10 @@ Game {
 }
 ```
 
+## Entity States
+
+(See a complete list of convenient built-in states)[/blob/main/EntityStates.md], and learn how to create your own.
+
 ## Contribution
 
 We welcome contributions to GameDSL2D! If you'd like to contribute, please fork the repository, make your changes, and submit a pull request. If you have any questions, feel free to open an issue or reach out to us directly.

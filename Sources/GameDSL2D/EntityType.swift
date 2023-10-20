@@ -80,4 +80,5 @@ public enum EntityType: String, KeyProtocol {
     // Other
     case camera
     case other
+    case stateMachine
 }

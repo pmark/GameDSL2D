@@ -97,7 +97,7 @@ final class EntityTests: XCTestCase {
             type: .player, name: "Test Entity",
             data: { TestGameData(testDataProperty: 3) }
         ) {
-            State(key: StateKey.active)
+            State(key: EntityStateKey.active)
         }
         
         XCTAssertEqual(entity.name, "Test Entity")

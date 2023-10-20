@@ -11,21 +11,21 @@ import XCTest
 final class StateTests: XCTestCase {
 
     func testStateInitialization() {
-        let state = State(key: .initializing)
-        XCTAssertEqual(state.key, AnyKey(StateKey.initializing))
+        let state = State(key: .alive)
+        XCTAssertEqual(state.key, AnyKey(.alive))
     }
     
     func testEvents() {
         var onEnterCalled = false
         var onExitCalled = false
-        let state = State(key: StateKey.initializing)
+        let state = State(key: EntityStateKey.active.rawValue)
             .didEnter { state in
                 onEnterCalled = true
-                XCTAssertEqual(state.key, AnyKey(StateKey.initializing))
+                XCTAssertEqual(state.key, AnyKey(EntityStateKey.active))
             }
             .willExit { state in
                 onExitCalled = true
-                XCTAssertEqual(state.key, AnyKey(StateKey.initializing))
+                XCTAssertEqual(state.key, AnyKey(EntityStateKey.active))
             }
         
         // Trigger onEnter and onExit to verify they work

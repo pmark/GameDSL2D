@@ -6,6 +6,12 @@ public class Entity: BaseConstruct, Activatable {
     public let type: AnyKey
     public var componentInitializers: [ComponentInitializer] = []
     private var _okEntity: OKEntity? = nil
+    public var states: [AnyKey: State] = [:]
+    public var currentState: State?
+    
+    public var identifier: EntityIdentifier {
+        EntityIdentifier(type: self.type, name: self.name)
+    }
     
     public lazy var okEntity: OKEntity = {
         guard let okEntity = _okEntity else {
@@ -87,6 +93,11 @@ public class Entity: BaseConstruct, Activatable {
             self.addComponents(construct.componentsClosure)
         }
         
+        let stateConstructs = children(ofType: State.self)
+        for state in stateConstructs {
+            self.states[state.key] = state
+        }
+
         // Automatically register the entity for future use
         EntityRegistry.shared.register(type: type, name: self.name, entity: self)
     }
@@ -129,6 +140,12 @@ public class Entity: BaseConstruct, Activatable {
 extension BaseConstruct {
     var entities: [Entity] {
         return children(ofType: Entity.self)
+    }
+    
+    func firstEntity(withIdentifier identifier: EntityIdentifier) -> Entity? {
+        self.entities.first { entity in
+            entity.identifier == identifier
+        }
     }
 }
 
